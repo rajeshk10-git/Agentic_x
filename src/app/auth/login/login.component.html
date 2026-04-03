@@ -1,0 +1,84 @@
+<div class="erp-auth-page">
+  <div class="erp-auth-page__shell">
+    <div class="erp-auth erp-auth--card">
+      <div class="erp-auth__header-center">
+        <div class="erp-auth__icon-box" aria-hidden="true">
+          <svg class="erp-auth__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="11" width="14" height="10" rx="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h1 class="erp-auth__title erp-auth__title--center">{{ ui.cardTitle }}</h1>
+        <p class="erp-auth__subtitle erp-auth__subtitle--center">
+          <strong>{{ appName }}</strong> · {{ appTagline }}
+        </p>
+        <p class="erp-auth__lede erp-auth__lede--center">{{ ui.signInLead }}</p>
+      </div>
+
+      <form class="erp-auth__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="erp-field">
+          <label class="erp-field__label" for="login-email">{{ ui.emailLabel }}</label>
+          <div class="erp-input-wrap">
+            <input
+              id="login-email"
+              type="email"
+              class="erp-input erp-input--inset"
+              [class.erp-input--error]="submitted && form.controls.email.invalid"
+              formControlName="email"
+              [attr.placeholder]="ui.emailPlaceholder"
+              autocomplete="email"
+            />
+            <span class="erp-input-wrap__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <path d="m22 6-10 7L2 6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+          <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['required']">Email is required.</div>
+          <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['email']">Enter a valid email.</div>
+        </div>
+
+        <div class="erp-field">
+          <label class="erp-field__label" for="login-password">{{ ui.passwordLabel }}</label>
+          <div class="erp-input-wrap">
+            <input
+              id="login-password"
+              type="password"
+              class="erp-input erp-input--inset"
+              [class.erp-input--error]="submitted && form.controls.password.invalid"
+              formControlName="password"
+              [attr.placeholder]="ui.passwordPlaceholder"
+              autocomplete="current-password"
+            />
+            <span class="erp-input-wrap__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="11" width="14" height="10" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-linecap="round" />
+              </svg>
+            </span>
+          </div>
+          <div class="erp-field__error" *ngIf="submitted && form.controls.password.errors?.['required']">Password is required.</div>
+          <div class="erp-field__error" *ngIf="submitted && form.controls.password.errors?.['minlength']">At least 8 characters.</div>
+        </div>
+
+        <div class="erp-auth__row">
+          <a routerLink="/auth/forgot-password" class="erp-link--muted">{{ ui.forgotLink }}</a>
+        </div>
+
+        <div class="erp-field__error" *ngIf="apiError" role="alert">{{ apiError }}</div>
+
+        <button type="submit" class="erp-btn erp-btn--primary erp-btn--block" [disabled]="loading">
+          {{ loading ? ui.submitting : ui.submit }}
+        </button>
+      </form>
+
+      <p class="erp-auth__footer erp-auth__footer--tight">
+        {{ ui.footerLead }}
+        <a routerLink="/auth/register">{{ ui.footerLink }}</a>
+      </p>
+
+      <p class="erp-auth__legal">{{ ui.footerLegal }}</p>
+    </div>
+  </div>
+</div>

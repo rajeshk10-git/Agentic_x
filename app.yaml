@@ -1,0 +1,26 @@
+# App Engine (standard) — static hosting for Angular SPA.
+# Build output path matches angular.json: dist/financial-tax-erp
+# Python runtime is used only so we can serve static files without a custom server binary.
+
+runtime: python312
+entrypoint: ''
+
+handlers:
+  # Root
+  - url: /
+    static_files: dist/financial-tax-erp/index.html
+    upload: dist/financial-tax-erp/index.html
+
+  # Angular /public assets
+  - url: /assets
+    static_dir: dist/financial-tax-erp/assets
+
+  # Root-level static bundles (hashed JS/CSS, favicon, etc.)
+  - url: /(.*\.(js|css|map|svg|png|jpg|jpeg|gif|ico|webp|woff2?|ttf|eot|json))$
+    static_files: dist/financial-tax-erp/\1
+    upload: dist/financial-tax-erp/.*\.(js|css|map|svg|png|jpg|jpeg|gif|ico|webp|woff2?|ttf|eot|json)$
+
+  # SPA: all other routes → index.html (Angular router)
+  - url: /.*
+    static_files: dist/financial-tax-erp/index.html
+    upload: dist/financial-tax-erp/index.html

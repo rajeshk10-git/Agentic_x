@@ -1,0 +1,206 @@
+// Shell for the embedded multimodal chat widget — matches your chat component tokens
+// FAB / panel layout from your widget; panel content is placeholder until you integrate.
+
+.chat-fab {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right, 0px));
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  z-index: 10000;
+  border-radius: 0.375rem;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    left 0.25s ease,
+    right 0.25s ease;
+}
+
+.chat-fab.btn-light {
+  background: #ffffff;
+  border: 1px solid #d9e3ef;
+}
+
+.chat-fab__logo {
+  display: block;
+  width: 112px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.chat-fab:hover {
+  transform: translateY(-2px);
+}
+
+.chat-fab.chat-dock--left {
+  right: auto;
+  left: max(24px, env(safe-area-inset-left, 0px));
+}
+
+.chat-panel {
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right, 0px));
+  bottom: max(84px, calc(72px + env(safe-area-inset-bottom, 0px)));
+  width: min(390px, calc(100vw - 24px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
+  height: min(640px, calc(100vh - 110px - env(safe-area-inset-bottom, 0px)));
+  z-index: 9999;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  transition: left 0.25s ease, right 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-card);
+  border: 1px solid var(--app-border);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chat-panel.chat-dock--left {
+  right: auto;
+  left: max(24px, env(safe-area-inset-left, 0px));
+}
+
+.chat-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(14, 125, 63, 0.06) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.chat-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.erp-chat-panel__shell {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--app-card);
+}
+
+.erp-chat-panel__bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--app-border);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  flex-shrink: 0;
+}
+
+.erp-chat-panel__bar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.erp-chat-panel__bar h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--app-text);
+}
+
+.erp-chat-panel__status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+}
+
+.erp-chat-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--app-page-bg) 40%, var(--app-card));
+}
+
+.erp-chat-placeholder__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.erp-chat-placeholder__text {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--app-text-muted);
+  line-height: 1.5;
+  max-width: 28ch;
+}
+
+.erp-chat-placeholder__hint {
+  margin-top: 1rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--chat-brand);
+}
+
+.chat-fab__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  min-width: 120px;
+  cursor: pointer;
+  font-family: var(--app-font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--chat-brand-dark);
+}
+
+.chat-fab__trigger-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--chat-brand);
+}
+
+@media (max-width: 540px) {
+  .chat-panel {
+    right: max(12px, env(safe-area-inset-right, 0px));
+    left: max(12px, env(safe-area-inset-left, 0px));
+    width: auto;
+    bottom: max(72px, calc(60px + env(safe-area-inset-bottom, 0px)));
+    height: min(70dvh, calc(100dvh - 76px - env(safe-area-inset-bottom, 0px)));
+    border-radius: var(--app-radius-md, 12px);
+  }
+
+  .chat-panel.chat-dock--left {
+    right: max(12px, env(safe-area-inset-right, 0px));
+    left: max(12px, env(safe-area-inset-left, 0px));
+  }
+
+  .chat-fab {
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .chat-fab.chat-dock--left {
+    right: auto;
+    left: max(12px, env(safe-area-inset-left, 0px));
+  }
+
+  .chat-fab__trigger {
+    min-width: 0;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .chat-fab__trigger {
+    gap: 0.3rem;
+    padding: 0.5rem 0.55rem;
+  }
+}

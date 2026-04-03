@@ -1,0 +1,25 @@
+# Files excluded from `gcloud app deploy` uploads.
+# Important: default behavior merges .gitignore, which ignores /dist — so we define
+# this file explicitly and do NOT ignore dist/financial-tax-erp (build output).
+
+.gcloudignore
+.git/
+.gitignore
+
+node_modules/
+npm-debug.log*
+.angular/
+coverage/
+
+# Source and tooling — not needed on App Engine (only dist/ + app.yaml matter)
+src/
+e2e/
+*.md
+.editorconfig
+tsconfig*.json
+angular.json
+karma.conf.js
+cloudbuild.yaml
+
+package.json
+package-lock.json

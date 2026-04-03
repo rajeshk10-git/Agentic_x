@@ -1,0 +1,28 @@
+# Google Cloud Build → Angular production build → App Engine
+# Trigger: connect repo in Cloud Build, set this file as config, use same root as this file.
+#
+# Required: enable Cloud Build API, App Engine API; grant Cloud Build SA
+# roles for App Engine deploy (e.g. App Engine Admin, Service Account User).
+
+steps:
+  - name: 'node:18'
+    id: 'install'
+    entrypoint: 'npm'
+    args: ['ci']
+
+  - name: 'node:18'
+    id: 'build'
+    entrypoint: 'npx'
+    args: ['ng', 'build', '--configuration', 'production']
+    waitFor: ['install']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'deploy'
+    entrypoint: 'gcloud'
+    args: ['app', 'deploy', 'app.yaml', '--quiet']
+    waitFor: ['build']
+
+timeout: '1200s'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,560 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--app-font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--app-text);
+  background-color: var(--app-page-bg);
+  background-image: radial-gradient(ellipse 130% 90% at 0% -30%, rgba(14, 125, 63, 0.14), transparent 52%),
+    radial-gradient(ellipse 100% 80% at 100% -10%, rgba(16, 185, 129, 0.1), transparent 48%),
+    radial-gradient(ellipse 70% 55% at 50% 110%, rgba(59, 130, 246, 0.06), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--app-link);
+  text-decoration: none;
+  transition: color 0.15s ease, opacity 0.15s ease;
+
+  &:hover {
+    color: var(--app-primary-hover);
+  }
+}
+
+a[href],
+button:not(:disabled),
+[routerLink],
+[role='link'],
+summary,
+.erp-btn,
+.erp-link--muted,
+.erp-portal-text-link,
+.erp-portal-card__link,
+.erp-portal-icon-btn,
+.chat-fab,
+.erp-chat-placeholder a {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+.erp-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+// --- Auth (same theme as dashboard) ---
+.erp-auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--erp-space-lg);
+  background: var(--app-auth-page-bg);
+}
+
+.erp-auth-page__shell {
+  width: 100%;
+  max-width: 26.5rem;
+}
+
+.erp-auth {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: var(--erp-space-xl);
+  padding-top: calc(var(--erp-space-xl) + 6px);
+  border-radius: var(--erp-radius-lg);
+  background: var(--app-card);
+  border: 1px solid var(--app-border-light);
+  box-shadow: var(--app-shadow-card);
+  animation: erpFadeUp 0.55s ease both;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: var(--app-primary-gradient);
+  }
+}
+
+.erp-auth__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--erp-space-md);
+  margin-bottom: var(--erp-space-lg);
+}
+
+.erp-auth__mark:not(.erp-auth__mark--bizzy) {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--app-radius-md);
+  background: var(--app-primary-soft);
+  border: 1px solid var(--app-primary-muted);
+  display: grid;
+  place-items: center;
+  font-family: var(--app-font-display);
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--app-primary);
+  box-shadow: var(--app-shadow-inset);
+}
+
+.erp-auth__title {
+  font-family: var(--app-font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+  color: var(--app-text);
+  letter-spacing: -0.02em;
+}
+
+.erp-auth__subtitle {
+  margin: var(--erp-space-xs) 0 0;
+  font-size: 0.92rem;
+  color: var(--app-text-muted);
+}
+
+.erp-auth__lede {
+  margin: 0.5rem 0 0;
+  font-size: 0.92rem;
+  color: var(--app-text-muted);
+}
+
+.erp-auth__mark--bizzy {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: var(--app-radius-md);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+}
+
+.erp-auth__mark--bizzy img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.erp-auth__hint {
+  margin-bottom: var(--erp-space-md);
+}
+
+.erp-auth__success {
+  margin-bottom: var(--erp-space-md);
+  color: var(--app-success);
+}
+
+.erp-auth__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.erp-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--erp-space-xs);
+}
+
+.erp-field__label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--app-text-muted);
+  text-transform: uppercase;
+}
+
+.erp-input {
+  width: 100%;
+  padding: 0.68rem 0.9rem;
+  border: none;
+  border-radius: var(--app-radius-sm);
+  background: transparent;
+  color: var(--app-text);
+  font: inherit;
+  outline: none;
+  box-shadow: none;
+  transition: background 0.18s ease;
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &::placeholder {
+    color: var(--app-text-muted);
+    opacity: 0.75;
+  }
+}
+
+.erp-field__error {
+  font-size: 0.8rem;
+  color: var(--app-danger);
+  min-height: 1.1em;
+}
+
+.erp-auth__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--erp-space-sm);
+}
+
+.erp-auth__footer {
+  margin-top: var(--erp-space-md);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--app-text-muted);
+}
+
+.erp-auth__footer--tight {
+  margin-top: 1.1rem;
+}
+
+/* Centered “card” header (Tailwind-style layout, Bizzy tokens) */
+.erp-auth.erp-auth--card {
+  padding: 1.55rem 1.35rem 1.35rem;
+  padding-top: calc(1.55rem + 5px);
+  max-width: 26.5rem;
+}
+
+.erp-auth--card {
+  border-radius: var(--app-radius-xl);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 14px 44px rgba(15, 23, 42, 0.08);
+}
+
+.erp-auth__header-center {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.erp-auth__icon-box {
+  width: 3rem;
+  height: 3rem;
+  margin: 0 auto 1rem;
+  border-radius: var(--app-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--app-primary-soft);
+  border: 1px solid var(--app-primary-muted);
+  color: var(--app-primary);
+}
+
+.erp-auth__icon-svg {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: block;
+}
+
+.erp-auth__title--center {
+  text-align: center;
+}
+
+.erp-auth__subtitle--center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 36ch;
+}
+
+.erp-auth__lede--center {
+  text-align: center;
+  margin-top: 0.65rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 40ch;
+}
+
+.erp-input-wrap {
+  position: relative;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-input-bg);
+  box-shadow: var(--app-input-shadow-rest);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.erp-input-wrap:focus-within {
+  background: var(--app-card);
+  box-shadow: var(--app-input-shadow-focus);
+}
+
+.erp-input-wrap:has(.erp-input--error):not(:focus-within) {
+  background: #fffafb;
+  box-shadow: var(--app-input-shadow-error-rest);
+}
+
+.erp-input-wrap:focus-within:has(.erp-input--error) {
+  background: var(--app-card);
+  box-shadow: var(--app-input-shadow-error-focus);
+}
+
+.erp-input-wrap:focus-within .erp-input-wrap__icon {
+  color: var(--app-primary);
+  opacity: 1;
+}
+
+.erp-input--inset {
+  padding-right: 2.6rem;
+}
+
+.erp-input-wrap__icon {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--app-text-muted);
+  opacity: 0.72;
+  pointer-events: none;
+  display: flex;
+  transition: color 0.18s ease, opacity 0.18s ease;
+}
+
+.erp-auth__legal {
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--app-border-light);
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--app-text-muted);
+}
+
+.erp-auth__summary-banner {
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.1rem;
+  border-radius: var(--app-radius-md);
+  background: #f8fafc;
+  border: 1px solid var(--app-border-light);
+}
+
+.erp-auth__summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.erp-auth__summary-label {
+  font-size: 0.8rem;
+  color: var(--app-text-muted);
+}
+
+.erp-auth__summary-email {
+  margin: 0.35rem 0 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--app-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.erp-btn--text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.3rem;
+  margin: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--app-link);
+  cursor: pointer;
+  border-radius: var(--app-radius-sm);
+
+  &:hover:not(:disabled) {
+    color: var(--app-primary-hover);
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.erp-auth__otp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.7rem;
+}
+
+.erp-auth__otp-head-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.erp-otp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.erp-otp__input {
+  width: 2.6rem;
+  height: 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--app-radius-sm);
+  background: var(--app-input-bg);
+  color: var(--app-text);
+  outline: none;
+  box-shadow: var(--app-input-shadow-rest);
+  transition: box-shadow 0.18s ease, background 0.18s ease;
+
+  &:focus {
+    background: var(--app-card);
+    box-shadow: var(--app-input-shadow-focus);
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+}
+
+.erp-otp__input::-webkit-outer-spin-button,
+.erp-otp__input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.erp-otp__input {
+  -moz-appearance: textfield;
+}
+
+.erp-auth__success-visual {
+  width: 4rem;
+  height: 4rem;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: rgba(5, 150, 105, 0.12);
+  color: var(--app-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.erp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--erp-space-xs);
+  padding: 0.8rem 1.35rem;
+  border-radius: var(--app-radius-sm);
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):active {
+    transform: translateY(1px);
+  }
+}
+
+.erp-btn--primary {
+  background: var(--app-primary-gradient);
+  color: var(--app-text-inverse);
+  box-shadow: 0 6px 20px rgba(14, 125, 63, 0.22);
+
+  &:hover:not(:disabled) {
+    box-shadow: 0 10px 28px rgba(14, 125, 63, 0.28);
+  }
+}
+
+.erp-btn--ghost {
+  background: var(--app-card);
+  border-color: var(--app-border);
+  color: var(--app-text);
+
+  &:hover:not(:disabled) {
+    border-color: var(--app-primary);
+    color: var(--app-primary);
+    background: var(--app-primary-soft);
+  }
+}
+
+.erp-btn--block {
+  width: 100%;
+}
+
+.erp-btn--center {
+  text-align: center;
+}
+
+.erp-link--muted {
+  color: var(--app-text-muted);
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--app-primary);
+  }
+}
+
+.erp-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+  border: 1px solid var(--app-primary-muted);
+}
+
+@keyframes erpFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
