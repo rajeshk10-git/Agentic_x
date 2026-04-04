@@ -5,10 +5,13 @@
 # roles for App Engine deploy (e.g. App Engine Admin, Service Account User).
 
 steps:
+  # Fresh deps every build: drop node_modules, clear npm cache, then install.
   - name: 'node:18'
     id: 'install'
-    entrypoint: 'npm'
-    args: ['ci']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - 'rm -rf node_modules && npm cache clean --force && npm install'
 
   - name: 'node:18'
     id: 'build'
