@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { BizzyBotComponent, BizzyBotWidgetConfig } from 'bot-lib';
+import { BizzyBotComponent, BizzyBotWidgetConfig } from 'bot-lib-v1';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { APP_NAME, APP_TAGLINE } from '../app.constants';

@@ -5,13 +5,14 @@
 # roles for App Engine deploy (e.g. App Engine Admin, Service Account User).
 
 steps:
-  # Fresh deps every build: drop node_modules, clear npm cache, then install.
+  # Fresh deps every build: remove lock so git deps (e.g. bot-lib#branch) resolve to latest commit;
+  # then clean install from package.json only. (Builds are less reproducible than a committed lockfile.)
   - name: 'node:18'
     id: 'install'
     entrypoint: 'bash'
     args:
       - '-c'
-      - 'rm -rf node_modules && npm cache clean --force && npm install'
+      - 'rm -rf node_modules package-lock.json && npm cache clean --force && npm install'
 
   - name: 'node:18'
     id: 'build'

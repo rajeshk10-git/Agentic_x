@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { BotLibModule } from 'bot-lib';
+import { BotLibModule } from 'bot-lib-v1';
 import { NgChartsModule } from 'ng2-charts';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';

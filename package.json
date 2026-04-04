@@ -24,7 +24,7 @@
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "0.11.6",
-    "bot-lib": "git+https://github.com/worksofravisharma/Bizzy-bot.git#frontend-bot-build-stage"
+    "bot-lib-v1": "git+https://github.com/worksofravisharma/Bizzy-bot.git#frontend-bot-build-stage"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "14.2.13",
