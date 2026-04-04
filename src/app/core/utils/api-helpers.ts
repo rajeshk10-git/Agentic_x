@@ -21,10 +21,17 @@ export function mapHttpErrorToMessage(err: unknown, fallback: string): string {
     if (typeof e === 'string' && e.trim()) {
       return e;
     }
-    if (typeof e === 'object' && e !== null && 'message' in e) {
-      const m = (e as { message?: string }).message;
+    if (typeof e === 'object' && e !== null) {
+      const obj = e as { message?: string | string[]; error?: string };
+      if (typeof obj.error === 'string' && obj.error.trim()) {
+        return obj.error;
+      }
+      const m = obj.message;
       if (typeof m === 'string' && m.trim()) {
         return m;
+      }
+      if (Array.isArray(m) && m.length) {
+        return m.filter((x) => typeof x === 'string').join('. ');
       }
     }
   }

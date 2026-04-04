@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  /** Base URL for API (Bizzy backend) */
-  apiUrl: 'http://localhost:3000/api',
+  /** Agentic-X API (Cloud Run) — no trailing slash */
+  apiUrl: 'https://service-agentic-x-git-1067454512065.europe-west1.run.app',
 };

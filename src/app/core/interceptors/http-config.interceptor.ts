@@ -9,14 +9,13 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-
-const TOKEN_KEY = 'access_token';
+import { AUTH_ACCESS_TOKEN_KEY, AUTH_USER_KEY } from '../constants/auth-storage.constants';
 
 @Injectable()
 export class HttpConfigInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     let headers = req.headers;
-    const token = sessionStorage.getItem(TOKEN_KEY);
+    const token = sessionStorage.getItem(AUTH_ACCESS_TOKEN_KEY);
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
@@ -34,7 +33,8 @@ export class HttpConfigInterceptor implements HttpInterceptor {
       catchError((err: unknown) => {
         if (err instanceof HttpErrorResponse) {
           if (err.status === 401) {
-            sessionStorage.removeItem(TOKEN_KEY);
+            sessionStorage.removeItem(AUTH_ACCESS_TOKEN_KEY);
+            sessionStorage.removeItem(AUTH_USER_KEY);
           }
           if (!environment.production) {
             console.warn('[HTTP]', err.status, req.method, req.url);

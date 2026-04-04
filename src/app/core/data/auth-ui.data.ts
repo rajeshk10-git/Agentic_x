@@ -26,7 +26,9 @@ export const REGISTER_UI = {
   fullNameLabel: 'Full name',
   fullNamePlaceholder: 'Enter your full name',
   passwordLabel: 'Password',
-  passwordPlaceholder: 'At least 8 characters',
+  passwordPlaceholder: 'Create a strong password',
+  passwordHint:
+    'Use 8+ characters with upper & lower case, a number, and a symbol (!@#$%…).',
   confirmLabel: 'Confirm password',
   confirmPlaceholder: 'Confirm your password',
   submit: 'Create account',

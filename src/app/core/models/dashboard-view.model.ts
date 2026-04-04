@@ -90,13 +90,8 @@ export interface DashboardUiStrings {
   };
   chat: {
     fabLabel: string;
-    fabTitle: string;
-    panelTitle: string;
-    placeholderTitle: string;
-    placeholderBody: string;
-    placeholderHint: string;
   };
-  quickLinks: { label: string; href: string }[];
+  quickLinks: { label: string; href: string; scrollTarget?: string }[];
 }
 
 export interface DashboardViewModel {

@@ -1,6 +1,8 @@
 // Dashboard shell — uses global :root --app-* tokens (same as auth)
 .erp-portal {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--app-font-sans);
   color: var(--app-text);
   background: transparent;
@@ -76,6 +78,28 @@
 
 .erp-portal-conn__label {
   letter-spacing: 0.02em;
+}
+
+.erp-portal-icon-btn-slot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.erp-portal-notify-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f87171 0%, #dc2626 100%);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow:
+    0 0 0 1px rgba(220, 38, 38, 0.25),
+    0 2px 6px rgba(220, 38, 38, 0.35);
+  pointer-events: none;
 }
 
 .erp-portal-icon-btn {
@@ -156,9 +180,211 @@
 }
 
 .erp-portal-body {
+  flex: 1 0 auto;
+  width: 100%;
   max-width: 1140px;
   margin: 0 auto;
   padding: 1.65rem 1.35rem 3.5rem;
+}
+
+.erp-dash-scroll-target {
+  scroll-margin-top: 5.5rem;
+}
+
+.erp-portal-footer {
+  position: relative;
+  flex-shrink: 0;
+  margin-top: auto;
+  overflow: hidden;
+  border-top: 1px solid var(--app-border-light);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(241, 253, 244, 0.55) 42%,
+    rgba(248, 250, 252, 0.98) 100%
+  );
+  backdrop-filter: saturate(1.12) blur(14px);
+  box-shadow: 0 -12px 40px rgba(14, 125, 63, 0.06);
+}
+
+.erp-portal-footer__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--app-primary) 0%, #34d399 45%, var(--app-primary) 100%);
+  opacity: 0.9;
+}
+
+.erp-portal-footer__glow {
+  position: absolute;
+  bottom: -40%;
+  right: -8%;
+  width: min(420px, 70vw);
+  height: min(420px, 70vw);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 125, 63, 0.12) 0%, transparent 68%);
+  pointer-events: none;
+}
+
+.erp-portal-footer__inner {
+  position: relative;
+  z-index: 1;
+  padding-top: 2rem;
+  padding-bottom: 1.25rem;
+}
+
+.erp-portal-footer__grid {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.erp-portal-footer__brand-block {
+  margin-bottom: 1rem;
+}
+
+.erp-portal-footer__brand {
+  display: block;
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--app-text);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.erp-portal-footer__tag {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 0.82rem;
+  color: var(--app-text-muted);
+  line-height: 1.45;
+  max-width: 28rem;
+}
+
+.erp-portal-footer__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.erp-portal-footer__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 999px;
+}
+
+.erp-portal-footer__badge--accent {
+  color: var(--app-primary-dark, #0a5c2e);
+  background: rgba(14, 125, 63, 0.1);
+  border-color: rgba(14, 125, 63, 0.2);
+}
+
+.erp-portal-footer__heading {
+  margin: 0 0 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+
+.erp-portal-footer__lede {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  color: var(--app-text-muted);
+  line-height: 1.5;
+}
+
+.erp-portal-footer__nav {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.erp-portal-footer__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--app-text);
+  text-decoration: none;
+  border-radius: var(--app-radius-sm);
+  transition: color 0.15s ease, transform 0.12s ease;
+
+  &:hover {
+    color: var(--app-primary);
+    transform: translateX(2px);
+  }
+}
+
+.erp-portal-footer__nav-icon {
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  color: var(--app-primary);
+  background: rgba(14, 125, 63, 0.1);
+  border-radius: var(--app-radius-sm);
+}
+
+.erp-portal-footer__fineprint {
+  margin: 0 0 1rem;
+  font-size: 0.78rem;
+  color: var(--app-text-muted);
+  line-height: 1.55;
+}
+
+.erp-portal-footer__copy {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--app-text-muted);
+  line-height: 1.5;
+}
+
+.erp-portal-footer__copy--emphasis {
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.erp-portal-footer__bottom {
+  padding-top: 1.15rem;
+  text-align: center;
+}
+
+.erp-portal-footer__bottom-text {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+  opacity: 0.85;
+}
+
+@media (min-width: 992px) {
+  .erp-portal-footer__grid {
+    border-bottom: none;
+    padding-bottom: 0.5rem;
+  }
+
+  .erp-portal-footer__heading {
+    margin-top: 0.15rem;
+  }
 }
 
 .erp-portal-hero {
@@ -1115,6 +1341,25 @@
   display: grid;
   place-items: center;
   color: var(--chat-brand);
+}
+
+button.erp-portal-docqa__icon {
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  appearance: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--chat-brand);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--chat-brand);
+    outline-offset: 2px;
+  }
 }
 
 .erp-portal-badge-soon {

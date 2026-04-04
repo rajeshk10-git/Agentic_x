@@ -1,10 +1,12 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { BizzyBotComponent, BizzyBotWidgetConfig } from 'bot-lib';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartData } from 'chart.js';
 import { APP_NAME, APP_TAGLINE } from '../app.constants';
+import { AUTH_ACCESS_TOKEN_KEY, AUTH_USER_KEY } from '../core/constants/auth-storage.constants';
+import { AuthUser } from '../core/models/auth-api.model';
 import { DASHBOARD_VIEW_DATA } from '../core/data/dashboard-view.data';
 import { DashboardChartsJson } from '../core/models/dashboard-charts.model';
-import { ApiService } from '../core/services/api.service';
 import { DashboardChartsService } from '../core/services/dashboard-charts.service';
 import { FormatService } from '../core/services/format.service';
 import { NetworkStatusService } from '../core/services/network-status.service';
@@ -16,8 +18,51 @@ import { DashboardViewModel, PayslipData, SalaryClarityData } from '../core/mode
   styles: [],
 })
 export class DashboardComponent implements OnInit {
+  @ViewChild(BizzyBotComponent) private bizzyBot?: BizzyBotComponent;
+  @ViewChild('quickLinks') private quickLinksRef?: ElementRef<HTMLDetailsElement>;
+
   readonly appName = APP_NAME;
   readonly appTagline = APP_TAGLINE;
+
+  /** Current calendar year for copyright (updates if the view is refreshed after year change). */
+  get copyrightYear(): number {
+    return new Date().getFullYear();
+  }
+
+  /** Smooth-scroll to a dashboard chart block; optional `href` fallback for non-JS. */
+  scrollToDashboardSection(targetId: string, event?: Event): void {
+    event?.preventDefault();
+    const el = document.getElementById(targetId);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const ql = this.quickLinksRef?.nativeElement;
+    if (ql?.open) {
+      ql.open = false;
+    }
+  }
+
+  onQuickLinkClick(event: Event, link: { href: string; scrollTarget?: string }): void {
+    if (link.scrollTarget) {
+      this.scrollToDashboardSection(link.scrollTarget, event);
+    }
+  }
+
+  @HostListener('document:pointerdown', ['$event'])
+  onDocumentPointerDown(event: PointerEvent): void {
+    const root = this.quickLinksRef?.nativeElement;
+    if (!root?.open) {
+      return;
+    }
+    const t = event.target as Node | null;
+    if (t && !root.contains(t)) {
+      root.open = false;
+    }
+  }
+
+  /** Real widget handles its own open/close (launcher + panel). */
+  readonly bizzyBotPanelConfig: BizzyBotWidgetConfig = {
+    brandName: APP_NAME,
+    brandTagline: APP_TAGLINE,
+  };
 
   /** Bound view model — populated from API service (falls back to mock). */
   vm: DashboardViewModel = DASHBOARD_VIEW_DATA;
@@ -25,7 +70,6 @@ export class DashboardComponent implements OnInit {
   todayLabel: string;
 
   showSalary = false;
-  showChatPanel = false;
   /** Promo “Learn more” explainer dialog. */
   showLearnMorePanel = false;
 
@@ -60,7 +104,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private api: ApiService,
     private format: FormatService,
     private dashboardCharts: DashboardChartsService,
     readonly networkStatus: NetworkStatusService
@@ -75,10 +118,12 @@ export class DashboardComponent implements OnInit {
       this.chartsReady = true;
     });
 
-    this.api.getDashboardView$().subscribe((d) => {
-      this.vm = d;
-      this.refreshVmBoundCharts();
-    });
+    // Demo / offline: skip GET `${apiUrl}/dashboard`; keep default `DASHBOARD_VIEW_DATA` above.
+    // Re-enable: inject `ApiService`, then:
+    // this.api.getDashboardView$().subscribe((d) => {
+    //   this.vm = d;
+    //   this.refreshVmBoundCharts();
+    // });
   }
 
   get greeting(): string {
@@ -90,6 +135,16 @@ export class DashboardComponent implements OnInit {
       return 'Good afternoon';
     }
     return 'Good evening';
+  }
+
+  /** Time-based greeting plus first name when the login API stored `auth_user`. */
+  get greetingLine(): string {
+    const u = this.sessionUser;
+    if (!u?.name?.trim()) {
+      return this.greeting;
+    }
+    const first = u.name.trim().split(/\s+/)[0];
+    return `${this.greeting}, ${first}`;
   }
 
   get payslip(): PayslipData {
@@ -117,15 +172,12 @@ export class DashboardComponent implements OnInit {
     this.refreshVmBoundCharts();
   }
 
-  toggleChatPanel(): void {
-    this.showChatPanel = !this.showChatPanel;
-  }
-
   downloadPayslip(): void {
     console.warn('Download payslip (stub)');
   }
 
   explorePromo(): void {
+    this.bizzyBot?.closeChat();
     this.showLearnMorePanel = true;
   }
 
@@ -133,21 +185,62 @@ export class DashboardComponent implements OnInit {
     this.showLearnMorePanel = false;
   }
 
-  /** Close learn-more and open the assistant shell (same as FAB). */
+  /** Close promo and open the embedded assistant (widget’s own UI). */
   openAssistantFromLearnMore(): void {
     this.showLearnMorePanel = false;
-    this.showChatPanel = true;
+    this.scheduleBizzyChatOpen();
+  }
+
+  /** Payslip document Q&A card: icon opens the same embedded AI assistant (Bizzy). */
+  openAssistantFromPayslipDocQa(): void {
+    this.showLearnMorePanel = false;
+    this.scheduleBizzyChatOpen();
+  }
+
+  private scheduleBizzyChatOpen(): void {
+    setTimeout(() => this.ensureBizzyChatOpen(), 0);
+  }
+
+  private ensureBizzyChatOpen(): void {
+    const bot = this.bizzyBot;
+    if (bot && !bot.isChatOpen) {
+      bot.toggleChat();
+    }
   }
 
   @HostListener('document:keydown.escape')
-  onLearnMoreEscape(): void {
+  onOverlayEscape(): void {
     if (this.showLearnMorePanel) {
       this.closeLearnMorePanel();
+      return;
+    }
+    const ql = this.quickLinksRef?.nativeElement;
+    if (ql?.open) {
+      ql.open = false;
+      return;
+    }
+    if (this.bizzyBot?.isChatOpen) {
+      this.bizzyBot.closeChat();
     }
   }
 
   signOut(): void {
+    sessionStorage.removeItem(AUTH_ACCESS_TOKEN_KEY);
+    sessionStorage.removeItem(AUTH_USER_KEY);
     this.router.navigate(['/auth/login']);
+  }
+
+  /** Logged-in user from session after successful login API. */
+  get sessionUser(): AuthUser | null {
+    try {
+      const raw = sessionStorage.getItem(AUTH_USER_KEY);
+      if (!raw) {
+        return null;
+      }
+      return JSON.parse(raw) as AuthUser;
+    } catch {
+      return null;
+    }
   }
 
   private applyJsonCharts(json: DashboardChartsJson): void {
@@ -193,7 +286,7 @@ export class DashboardComponent implements OnInit {
       labels: [...s.labels],
       datasets: [
         {
-          label: 'USD (demo)',
+          label: 'Compensation (USD)',
           data: [...s.data],
           backgroundColor: ['rgba(14, 125, 63, 0.92)', 'rgba(5, 150, 105, 0.75)', 'rgba(110, 231, 183, 0.85)'],
           borderRadius: 10,
@@ -263,7 +356,7 @@ export class DashboardComponent implements OnInit {
     const rate = this.vm.data.taxSim.effectiveRatePct;
     const rest = Math.max(0, 100 - rate);
     this.taxChartData = {
-      labels: ['Effective rate', 'Remainder (illustrative)'],
+      labels: ['Effective rate (est.)', 'Remaining pay slice'],
       datasets: [
         {
           data: [rate, rest],

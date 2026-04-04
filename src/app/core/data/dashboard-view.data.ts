@@ -1,32 +1,32 @@
 import { DashboardViewModel } from '../models/dashboard-view.model';
 
-/** Mock dashboard payload — replace with API response shape later. */
+/** Default dashboard payload when the API is unavailable — tune copy and figures for your tenant. */
 export const DASHBOARD_VIEW_DATA: DashboardViewModel = {
   ui: {
-    missionPills: ['Structural payroll data', 'Unstructured payslip PDFs', 'Multimodal AI agent'],
+    missionPills: ['Payroll integrations', 'Payslip intelligence', 'AI assistant'],
     heroTaxTip: {
       headline: 'Did you know?',
       quote:
-        'Most countries encourage long-term savings through registered pensions, provident funds, superannuation, or similar plans—often with a tax break when you contribute, while funds grow, or when you withdraw. Names, caps, and timing differ everywhere, so checking your local rules is how you capture the benefit.',
+        'Many employers offer pre-tax retirement contributions, commuter benefits, or health premiums that lower taxable income before withholding is calculated. Eligibility and limits depend on your plan and location—your HR or payroll team can confirm what applies to you.',
     },
     heroQuote:
-      'Securely combine payroll tables and payslip documents for personalized salary clarity, tax simulations, and instant Q&A — your hackathon agent, in one place.',
+      'See your compensation in one place: year-to-date earnings, estimated tax posture, and your latest payslip—plus answers from your assistant when you need them.',
     promo: {
       subtitle:
-        'Interrogate structured compensation data alongside uploaded payslips. Simulate tax outcomes and ask document-grounded questions — widget integration coming next.',
+        'Explore how structured payroll data and payslip documents work together for clearer take-home insight. Open the assistant anytime for grounded Q&A on your numbers.',
       cta: 'Learn more',
     },
     section: {
-      eyebrow: 'MVP dashboard',
+      eyebrow: 'Overview',
       title: 'Salary clarity & tax snapshot',
-      meta: 'Illustrative data · agent widget plugs in below',
+      meta: 'Figures reflect your connected payroll period · refreshed with each pay run',
     },
     cards: {
       salaryClarity: {
         title: 'Salary clarity',
-        leadPrefix: 'From ',
-        leadEmphasis: 'structured',
-        leadSuffix: ' payroll feeds (YTD aggregates).',
+        leadPrefix: 'Totals from your ',
+        leadEmphasis: 'connected payroll',
+        leadSuffix: ' feed (year-to-date through the current period).',
         metrics: [
           { label: 'YTD gross', field: 'ytdGross' },
           { label: 'YTD tax withheld', field: 'ytdTaxWithheld' },
@@ -34,15 +34,15 @@ export const DASHBOARD_VIEW_DATA: DashboardViewModel = {
         ],
       },
       taxSim: {
-        title: 'Tax simulation',
-        effectiveRateLabel: 'Effective rate (sample)',
+        title: 'Tax posture',
+        effectiveRateLabel: 'Estimated effective rate',
       },
       payslip: {
         title: 'Latest payslip',
-        metaPrefix: 'Net vs. deductions from ',
-        metaEmphasis: 'document-aligned',
-        metaSuffix: ' figures (demo).',
-        paidDaysLabel: 'Paid days',
+        metaPrefix: 'Breakdown aligns with ',
+        metaEmphasis: 'your last pay cycle',
+        metaSuffix: ' — gross, deductions, and net before optional perks.',
+        paidDaysLabel: 'Paid days in period',
         lines: [
           { label: 'Gross pay', variant: 'gross', field: 'grossPay' },
           { label: 'Deductions', variant: 'ded', field: 'deductions' },
@@ -54,57 +54,64 @@ export const DASHBOARD_VIEW_DATA: DashboardViewModel = {
       },
       docQa: {
         title: 'Payslip Q&A',
-        bodyLead: 'Ask line-item questions grounded in uploaded payslips — powered by your ',
-        bodyEmphasis: 'multimodal agent',
-        bodyTail: ' (separate service).',
-        badge: 'Widget slot reserved',
+        bodyLead: 'Ask about line items, codes, or net-vs-gross differences using ',
+        bodyEmphasis: 'your uploaded payslips',
+        bodyTail: ' as context—powered by the in-app assistant.',
+        badge: 'Assistant',
       },
     },
     charts: {
       withholding: {
-        title: 'Withholding vs gross (YTD sample)',
-        legend: 'Indexed to max month (demo)',
+        title: 'Withholding vs gross pay (YTD)',
+        legend: 'Indexed to your strongest pay month',
       },
       spark: {
-        title: 'Net pay trajectory (sample)',
-        legend: 'Last 12 pay periods (illustrative)',
+        title: 'Net pay trend',
+        legend: 'Last 12 pay periods',
       },
     },
     chat: {
       fabLabel: 'Assistant',
-      fabTitle: 'Open AI assistant (embed your widget here)',
-      panelTitle: 'Bizzy',
-      placeholderTitle: 'Embed your chat widget here',
-      placeholderBody:
-        'This shell uses Bizzy brand colors (--chat-brand). Drop in your multimodal agent widget here when ready.',
-      placeholderHint: 'Secure · document-aware · same theme',
     },
     quickLinks: [
-      { label: 'Payroll data sources', href: '#' },
-      { label: 'Uploaded payslips', href: '#' },
-      { label: 'Tax assumptions (sample)', href: '#' },
+      {
+        label: 'Payroll & YTD composition',
+        href: '#erp-dash-anchor-salary-ytd',
+        scrollTarget: 'erp-dash-anchor-salary-ytd',
+      },
+      {
+        label: 'Latest payslip',
+        href: '#erp-dash-anchor-payslip',
+        scrollTarget: 'erp-dash-anchor-payslip',
+      },
+      {
+        label: 'Tax parameters & withholding',
+        href: '#erp-dash-anchor-tax',
+        scrollTarget: 'erp-dash-anchor-tax',
+      },
     ],
   },
   data: {
     salaryClarity: {
-      ytdGross: 27600,
-      ytdTaxWithheld: 6210,
-      lastPayNet: 7360,
+      ytdGross: 82800,
+      ytdTaxWithheld: 18640,
+      lastPayNet: 6125,
     },
     taxSim: {
-      scenarioLabel: 'Illustrative scenario · any jurisdiction',
-      effectiveRatePct: 18.2,
-      headline: 'Est. balance vs. withholding (sample)',
-      detail: 'Based on YTD pay and withholding vs. a simple projected liability model. Rules vary by country—not tax advice.',
+      scenarioLabel: 'Married filing jointly · standard deduction (example)',
+      effectiveRatePct: 19.4,
+      headline: 'Withholding is tracking close to the model',
+      detail:
+        'We compare year-to-date withholding to a simplified annual liability estimate. Actual taxes depend on filing status, credits, and other income—this is guidance, not advice.',
     },
     payslip: {
       monthLabel: 'Mar',
       year: 2026,
-      paidDays: 31,
+      paidDays: 22,
       totalDaysInMonth: 31,
-      grossPay: 9200,
-      deductions: 1840,
-      netPay: 7360,
+      grossPay: 7665,
+      deductions: 1540,
+      netPay: 6125,
       currency: 'USD',
     },
     ytdBars: [

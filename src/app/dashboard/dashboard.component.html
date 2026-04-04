@@ -27,19 +27,35 @@
         ></span>
         <span class="erp-portal-conn__label">{{ net.online ? 'Online' : 'Offline' }}</span>
       </div>
-      <details class="erp-portal-ql">
-        <summary>Quick Links</summary>
+      <details #quickLinks class="erp-portal-ql">
+        <summary aria-haspopup="true">Quick Links</summary>
         <ul>
-          <li *ngFor="let q of vm.ui.quickLinks"><a [href]="q.href">{{ q.label }}</a></li>
+          <li *ngFor="let q of vm.ui.quickLinks">
+            <a [href]="q.href" (click)="onQuickLinkClick($event, q)">{{ q.label }}</a>
+          </li>
         </ul>
       </details>
-      <button type="button" class="erp-portal-icon-btn" aria-label="Notifications">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5" />
-          <path d="M9 17a3 3 0 0 0 6 0" stroke-linecap="round" />
-        </svg>
-      </button>
-      <button type="button" class="erp-portal-icon-btn" aria-label="Sign out" (click)="signOut()">
+      <span class="erp-portal-icon-btn-slot">
+        <button
+          type="button"
+          class="erp-portal-icon-btn"
+          aria-label="Notifications, 2 unread"
+          title="Notifications"
+        >
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5" />
+            <path d="M9 17a3 3 0 0 0 6 0" stroke-linecap="round" />
+          </svg>
+        </button>
+        <span class="erp-portal-notify-dot" aria-hidden="true"></span>
+      </span>
+      <button
+        type="button"
+        class="erp-portal-icon-btn"
+        aria-label="Log out"
+        title="Log out"
+        (click)="signOut()"
+      >
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
           <path d="M12 2v10" stroke-linecap="round" />
           <path d="M8 6H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-3" />
@@ -52,7 +68,7 @@
     <section class="erp-portal-hero">
       <div>
         <p class="erp-portal-hero__meta">{{ todayLabel }}</p>
-        <h1 class="erp-portal-hero__title">{{ greeting }}</h1>
+        <h1 class="erp-portal-hero__title">{{ greetingLine }}</h1>
         <div class="erp-portal-hero__tip" *ngIf="vm.ui.heroTaxTip as tip">
           <p class="erp-portal-hero__tip-line erp-portal-hero__tip-line--kicker">{{ tip.headline }}</p>
           <p class="erp-portal-hero__tip-line erp-portal-hero__tip-line--quote">{{ tip.quote }}</p>
@@ -98,7 +114,7 @@
     </div>
 
     <section class="erp-portal-grid erp-portal-grid--quad">
-      <article class="erp-portal-card">
+      <article id="erp-dash-anchor-salary-ytd" class="erp-portal-card erp-dash-scroll-target">
         <div class="erp-portal-card__head">
           <h2 class="erp-portal-card__title">{{ vm.ui.cards.salaryClarity.title }}</h2>
         </div>
@@ -127,7 +143,7 @@
         </div>
       </article>
 
-      <article class="erp-portal-card">
+      <article id="erp-dash-anchor-tax" class="erp-portal-card erp-dash-scroll-target">
         <div class="erp-portal-card__head">
           <h2 class="erp-portal-card__title">{{ vm.ui.cards.taxSim.title }}</h2>
         </div>
@@ -149,7 +165,7 @@
         </div>
       </article>
 
-      <article class="erp-portal-card">
+      <article id="erp-dash-anchor-payslip" class="erp-portal-card erp-dash-scroll-target">
         <div class="erp-portal-card__head">
           <h2 class="erp-portal-card__title">{{ vm.ui.cards.payslip.title }}</h2>
           <a class="erp-portal-card__link" href="#" aria-label="Payslip detail" (click)="$event.preventDefault()">
@@ -207,12 +223,17 @@
           <h2 class="erp-portal-card__title">{{ vm.ui.cards.docQa.title }}</h2>
         </div>
         <div class="erp-portal-card__body erp-portal-docqa">
-          <div class="erp-portal-docqa__icon" aria-hidden="true">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <button
+            type="button"
+            class="erp-portal-docqa__icon"
+            (click)="openAssistantFromPayslipDocQa()"
+            [attr.aria-label]="vm.ui.chat.fabLabel + ' — ' + vm.ui.cards.docQa.title"
+          >
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
               <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke-linecap="round" />
             </svg>
-          </div>
+          </button>
           <p class="erp-portal-muted">
             {{ vm.ui.cards.docQa.bodyLead }}<strong>{{ vm.ui.cards.docQa.bodyEmphasis }}</strong>{{ vm.ui.cards.docQa.bodyTail }}
           </p>
@@ -221,7 +242,7 @@
       </article>
     </section>
 
-    <section class="erp-portal-charts-row" *ngIf="chartsReady">
+    <section id="erp-dash-anchor-trends" class="erp-portal-charts-row erp-dash-scroll-target" *ngIf="chartsReady">
       <div class="erp-portal-mini-chart erp-portal-mini-chart--rich">
         <h3 class="erp-portal-mini-chart__title">{{ vm.ui.charts.withholding.title }}</h3>
         <div class="erp-portal-chart-canvas erp-portal-chart-canvas--main">
@@ -248,16 +269,86 @@
       </div>
     </section>
 
-    <section class="erp-portal-charts-row erp-portal-charts-row--wide" *ngIf="chartsReady">
+    <section
+      id="erp-dash-anchor-cashflow"
+      class="erp-portal-charts-row erp-portal-charts-row--wide erp-dash-scroll-target"
+      *ngIf="chartsReady"
+    >
       <div class="erp-portal-mini-chart erp-portal-mini-chart--rich erp-portal-mini-chart--span-full">
         <h3 class="erp-portal-mini-chart__title">Quarterly gross inflow vs tax outflow</h3>
-        <p class="erp-portal-mini-chart__deck">Dummy quarterly series from <code>dashboard-charts.json</code> — swap with payroll API totals.</p>
+        <p class="erp-portal-mini-chart__deck">
+          Quarterly gross inflow vs estimated tax outflow—forecast quarter reflects your current run-rate. Wire this series to your payroll ledger when you go live.
+        </p>
         <div class="erp-portal-chart-canvas erp-portal-chart-canvas--wide">
           <canvas baseChart [type]="cashflowChartType" [data]="cashflowChartData" [options]="cashflowChartOptions"></canvas>
         </div>
       </div>
     </section>
   </div>
+
+  <footer class="erp-portal-footer" role="contentinfo">
+    <div class="erp-portal-footer__accent" aria-hidden="true"></div>
+    <div class="erp-portal-footer__glow" aria-hidden="true"></div>
+    <div class="container erp-portal-footer__inner">
+      <div class="row erp-portal-footer__grid">
+        <div class="col-12 col-lg-4 mb-4 mb-lg-0">
+          <div class="erp-portal-footer__brand-block">
+            <span class="erp-portal-footer__brand">{{ appName }}</span>
+            <span class="erp-portal-footer__tag">{{ appTagline }}</span>
+          </div>
+          <div class="erp-portal-footer__badges" aria-label="Product notes">
+            <span class="erp-portal-footer__badge">Demo workspace</span>
+            <span class="erp-portal-footer__badge erp-portal-footer__badge--accent">Charts · synced fixtures</span>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-4 mb-md-0">
+          <h3 class="erp-portal-footer__heading">Jump to charts</h3>
+          <p class="erp-portal-footer__lede">Quick scroll to the main graph areas on this dashboard.</p>
+          <ul class="erp-portal-footer__nav" aria-label="Chart shortcuts">
+            <li *ngFor="let q of vm.ui.quickLinks">
+              <a [href]="q.href" class="erp-portal-footer__nav-link" (click)="onQuickLinkClick($event, q)">
+                <span class="erp-portal-footer__nav-icon" aria-hidden="true">↗</span>
+                {{ q.label }}
+              </a>
+            </li>
+            <li>
+              <a
+                href="#erp-dash-anchor-trends"
+                class="erp-portal-footer__nav-link"
+                (click)="scrollToDashboardSection('erp-dash-anchor-trends', $event)"
+              >
+                <span class="erp-portal-footer__nav-icon" aria-hidden="true">↗</span>
+                Trend charts (withholding &amp; net pay)
+              </a>
+            </li>
+            <li>
+              <a
+                href="#erp-dash-anchor-cashflow"
+                class="erp-portal-footer__nav-link"
+                (click)="scrollToDashboardSection('erp-dash-anchor-cashflow', $event)"
+              >
+                <span class="erp-portal-footer__nav-icon" aria-hidden="true">↗</span>
+                Quarterly cashflow chart
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <h3 class="erp-portal-footer__heading">Compliance &amp; trust</h3>
+          <p class="erp-portal-footer__fineprint">
+            Numbers shown are representative for product review—not tax, legal, or investment advice. Publish your own terms,
+            privacy policy, and regulatory disclosures before production use.
+          </p>
+          <p class="erp-portal-footer__copy erp-portal-footer__copy--emphasis">
+            &copy; {{ copyrightYear }} {{ appName }}. All rights reserved.
+          </p>
+        </div>
+      </div>
+      <div class="erp-portal-footer__bottom">
+        <span class="erp-portal-footer__bottom-text">Built for clarity across structured data and documents</span>
+      </div>
+    </div>
+  </footer>
 
   <div class="erp-learn-more-root" *ngIf="showLearnMorePanel">
     <div class="erp-learn-more-backdrop" (click)="closeLearnMorePanel()" aria-hidden="true"></div>
@@ -276,36 +367,5 @@
     </div>
   </div>
 
-  <button
-    type="button"
-    class="chat-fab btn-light"
-    (click)="toggleChatPanel()"
-    [attr.aria-expanded]="showChatPanel"
-    aria-controls="erp-chat-panel"
-    [title]="vm.ui.chat.fabTitle"
-  >
-    <span class="chat-fab__trigger">
-      <svg class="chat-fab__trigger-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke-linecap="round" stroke-linejoin="round" />
-      </svg>
-      {{ vm.ui.chat.fabLabel }}
-    </span>
-  </button>
-
-  <div class="chat-panel" id="erp-chat-panel" *ngIf="showChatPanel" role="dialog" aria-label="AI assistant placeholder">
-    <div class="erp-chat-panel__shell">
-      <div class="erp-chat-panel__bar">
-        <div class="erp-chat-panel__bar-left">
-          <span class="erp-chat-panel__status" aria-hidden="true"></span>
-          <h1>{{ vm.ui.chat.panelTitle }}</h1>
-        </div>
-        <button type="button" class="erp-portal-icon-btn" (click)="toggleChatPanel()" aria-label="Close">✕</button>
-      </div>
-      <div class="erp-chat-placeholder">
-        <p class="erp-chat-placeholder__title">{{ vm.ui.chat.placeholderTitle }}</p>
-        <p class="erp-chat-placeholder__text">{{ vm.ui.chat.placeholderBody }}</p>
-        <p class="erp-chat-placeholder__hint">{{ vm.ui.chat.placeholderHint }}</p>
-      </div>
-    </div>
-  </div>
+  <lib-bizzy-bot [config]="bizzyBotPanelConfig"></lib-bizzy-bot>
 </div>

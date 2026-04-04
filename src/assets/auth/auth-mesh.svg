@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="blobA" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0e7d3f" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#13a354" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="blobB" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#059669" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="blobC" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#0a5c2e" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+      <stop offset="55%" stop-color="#ecfdf5" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="#e2e9f0"/>
+  <ellipse cx="280" cy="220" rx="520" ry="380" fill="url(#blobA)" transform="rotate(-12 280 220)"/>
+  <ellipse cx="1280" cy="180" rx="440" ry="320" fill="url(#blobB)"/>
+  <path
+    fill="url(#blobC)"
+    d="M0 520 Q400 380 800 520 T1600 480 L1600 1000 L0 1000 Z"
+  />
+  <ellipse cx="900" cy="650" rx="600" ry="400" fill="url(#glow)"/>
+</svg>

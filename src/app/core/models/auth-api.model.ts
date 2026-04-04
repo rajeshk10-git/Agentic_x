@@ -3,8 +3,9 @@ export interface LoginRequest {
   password: string;
 }
 
+/** POST /auth/register — Agentic-X expects `name` (not fullName). */
 export interface RegisterRequest {
-  fullName: string;
+  name: string;
   email: string;
   password: string;
 }
@@ -24,12 +25,22 @@ export interface ForgotPasswordOtpResponse {
   message?: string;
 }
 
-/** Backend may use snake_case or camelCase for tokens. */
+export interface AuthUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
+/**
+ * Login/register response — supports Cloud Run agentic-x shape:
+ * `{ success, user, token }` plus common alternates.
+ */
 export interface AuthSessionResponse {
+  success?: boolean;
+  user?: AuthUser;
   access_token?: string;
   accessToken?: string;
   token?: string;
   refresh_token?: string;
   refreshToken?: string;
-  user?: unknown;
 }
