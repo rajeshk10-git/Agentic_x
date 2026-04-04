@@ -1,214 +1,146 @@
-<div class="erp-auth-page erp-auth-page--register">
-  <div class="erp-reg-deco" aria-hidden="true">
-    <span class="erp-reg-deco__orb erp-reg-deco__orb--a"></span>
-    <span class="erp-reg-deco__orb erp-reg-deco__orb--b"></span>
-    <span class="erp-reg-deco__orb erp-reg-deco__orb--c"></span>
-  </div>
-
-  <div class="erp-auth-page__shell erp-auth-page__shell--register">
-    <div class="erp-auth erp-auth--register erp-auth--card">
-      <div class="erp-auth__header-center">
-        <div class="erp-auth__icon-box" aria-hidden="true">
-          <svg class="erp-auth__icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-linecap="round" />
-            <circle cx="9" cy="7" r="4" />
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke-linecap="round" />
-          </svg>
+<div class="erp-auth-page">
+  <div class="erp-auth-page__shell">
+    <div class="erp-auth erp-auth--card erp-auth--login-ui">
+      <header class="erp-auth-login__header">
+        <div class="erp-auth-login__brand">
+          <i class="bi bi-lock-fill erp-auth-login__brand-icon" aria-hidden="true"></i>
+          <div class="erp-auth-login__brand-text">
+            <span class="erp-auth-login__brand-name">{{ appName }}</span>
+            <span class="erp-auth-login__brand-tag">{{ appTagline }}</span>
+          </div>
         </div>
-        <h1 class="erp-auth__title erp-auth__title--center">{{ ui.cardTitle }}</h1>
-        <p class="erp-auth__subtitle erp-auth__subtitle--center">
+      </header>
+
+      <main class="erp-auth-login__main">
+        <h1 class="erp-auth-login__title">{{ ui.cardTitle }}</h1>
+        <p class="erp-auth-login__subtitle">
           {{ ui.joinLead }} <strong>{{ appName }}</strong> {{ ui.joinConnector }} {{ appTagline }}.
         </p>
-      </div>
 
-      <form class="erp-auth__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-        <div class="erp-field">
-          <label class="erp-field__label" for="reg-name">{{ ui.fullNameLabel }}</label>
-          <div class="erp-input-wrap">
-            <input
-              id="reg-name"
-              type="text"
-              class="erp-input erp-input--inset"
-              [class.erp-input--error]="submitted && form.controls.fullName.invalid"
-              formControlName="fullName"
-              [attr.placeholder]="ui.fullNamePlaceholder"
-              autocomplete="name"
-            />
-            <span class="erp-input-wrap__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </span>
+        <form class="erp-auth__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <div class="erp-field erp-auth-login__field">
+            <label class="erp-field__label erp-auth-login__sr-only" for="reg-name">{{ ui.fullNameLabel }}</label>
+            <div class="erp-input-wrap">
+              <span class="erp-input-wrap__icon erp-input-wrap__icon--start" aria-hidden="true">
+                <i class="bi bi-person"></i>
+              </span>
+              <input
+                id="reg-name"
+                type="text"
+                class="erp-input erp-input--auth-leading"
+                [class.erp-input--error]="submitted && form.controls.fullName.invalid"
+                formControlName="fullName"
+                [attr.placeholder]="ui.fullNamePlaceholder"
+                autocomplete="name"
+              />
+            </div>
+            <div class="erp-field__error" *ngIf="submitted && form.controls.fullName.errors?.['required']">Name is required.</div>
           </div>
-          <div class="erp-field__error" *ngIf="submitted && form.controls.fullName.errors?.['required']">Name is required.</div>
-        </div>
 
-        <div class="erp-field">
-          <label class="erp-field__label" for="reg-email">{{ ui.emailLabel }}</label>
-          <div class="erp-input-wrap">
-            <input
-              id="reg-email"
-              type="email"
-              class="erp-input erp-input--inset"
-              [class.erp-input--error]="submitted && form.controls.email.invalid"
-              formControlName="email"
-              [attr.placeholder]="ui.emailPlaceholder"
-              autocomplete="email"
-            />
-            <span class="erp-input-wrap__icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <path d="m22 6-10 7L2 6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-            </span>
+          <div class="erp-field erp-auth-login__field">
+            <label class="erp-field__label erp-auth-login__sr-only" for="reg-email">{{ ui.emailLabel }}</label>
+            <div class="erp-input-wrap">
+              <span class="erp-input-wrap__icon erp-input-wrap__icon--start" aria-hidden="true">
+                <i class="bi bi-envelope"></i>
+              </span>
+              <input
+                id="reg-email"
+                type="email"
+                class="erp-input erp-input--auth-leading"
+                [class.erp-input--error]="submitted && form.controls.email.invalid"
+                formControlName="email"
+                [attr.placeholder]="ui.emailPlaceholder"
+                autocomplete="email"
+              />
+            </div>
+            <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['required']">Email is required.</div>
+            <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['email']">Enter a valid email.</div>
           </div>
-          <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['required']">Email is required.</div>
-          <div class="erp-field__error" *ngIf="submitted && form.controls.email.errors?.['email']">Enter a valid email.</div>
-        </div>
 
-        <div class="erp-field">
-          <label class="erp-field__label" for="reg-password">{{ ui.passwordLabel }}</label>
-          <p class="erp-field__hint" id="reg-password-hint">{{ ui.passwordHint }}</p>
-          <div class="erp-input-wrap erp-input-wrap--password">
-            <input
-              id="reg-password"
-              [type]="showPassword ? 'text' : 'password'"
-              class="erp-input erp-input--with-reveal"
-              [class.erp-input--error]="submitted && form.controls.password.invalid"
-              formControlName="password"
-              [attr.placeholder]="ui.passwordPlaceholder"
-              autocomplete="new-password"
-              aria-describedby="reg-password-hint"
-            />
-            <button
-              type="button"
-              class="erp-password-reveal"
-              (click)="showPassword = !showPassword"
-              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
-              [attr.aria-pressed]="showPassword"
-            >
-              <svg
-                *ngIf="!showPassword"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
+          <div class="erp-field erp-auth-login__field">
+            <label class="erp-field__label erp-auth-login__sr-only" for="reg-password">{{ ui.passwordLabel }}</label>
+            <!-- <p class="erp-field__hint" id="reg-password-hint">{{ ui.passwordHint }}</p> -->
+            <div class="erp-input-wrap erp-input-wrap--password erp-input-wrap--login-password">
+              <span class="erp-auth-login__password-lead-icon" aria-hidden="true">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                id="reg-password"
+                [type]="showPassword ? 'text' : 'password'"
+                class="erp-input erp-input--with-reveal"
+                [class.erp-input--error]="submitted && form.controls.password.invalid"
+                formControlName="password"
+                [attr.placeholder]="ui.passwordPlaceholder"
+                autocomplete="new-password"
+                aria-describedby="reg-password-hint"
+              />
+              <button
+                type="button"
+                class="erp-password-reveal"
+                (click)="showPassword = !showPassword"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+                [attr.aria-pressed]="showPassword"
               >
-                <path
-                  d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <svg
-                *ngIf="showPassword"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
-              >
-                <path
-                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <line x1="1" y1="1" x2="23" y2="23" stroke-linecap="round" />
-              </svg>
-            </button>
+                <i *ngIf="!showPassword" class="bi bi-eye" aria-hidden="true"></i>
+                <i *ngIf="showPassword" class="bi bi-eye-slash" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="erp-field__error" *ngIf="submitted && form.controls.password.errors?.['required']">Password is required.</div>
+            <ng-container *ngIf="submitted && form.controls.password.errors?.['strongPassword'] as sp">
+              <ul class="erp-field__error erp-field__error--list" role="alert">
+                <li *ngIf="sp['minLength']">At least {{ minPwd }} characters.</li>
+                <li *ngIf="sp['maxLength']">At most {{ maxPwd }} characters.</li>
+                <li *ngIf="sp['uppercase']">Include an uppercase letter (A–Z).</li>
+                <li *ngIf="sp['lowercase']">Include a lowercase letter (a–z).</li>
+                <li *ngIf="sp['digit']">Include a number (0–9).</li>
+                <li *ngIf="sp['special']">Include a symbol (e.g. ! &#64; # $ % &amp; *).</li>
+              </ul>
+            </ng-container>
           </div>
-          <div class="erp-field__error" *ngIf="submitted && form.controls.password.errors?.['required']">Password is required.</div>
-          <ng-container *ngIf="submitted && form.controls.password.errors?.['strongPassword'] as sp">
-            <ul class="erp-field__error erp-field__error--list" role="alert">
-              <li *ngIf="sp['minLength']">At least {{ minPwd }} characters.</li>
-              <li *ngIf="sp['maxLength']">At most {{ maxPwd }} characters.</li>
-              <li *ngIf="sp['uppercase']">Include an uppercase letter (A–Z).</li>
-              <li *ngIf="sp['lowercase']">Include a lowercase letter (a–z).</li>
-              <li *ngIf="sp['digit']">Include a number (0–9).</li>
-              <li *ngIf="sp['special']">Include a symbol (e.g. ! &#64; # $ % &amp; *).</li>
-            </ul>
-          </ng-container>
-        </div>
 
-        <div class="erp-field">
-          <label class="erp-field__label" for="reg-confirm">{{ ui.confirmLabel }}</label>
-          <div class="erp-input-wrap erp-input-wrap--password">
-            <input
-              id="reg-confirm"
-              [type]="showConfirmPassword ? 'text' : 'password'"
-              class="erp-input erp-input--with-reveal"
-              [class.erp-input--error]="submitted && (form.controls.confirm.invalid || form.errors?.['mismatch'])"
-              formControlName="confirm"
-              [attr.placeholder]="ui.confirmPlaceholder"
-              autocomplete="new-password"
-            />
-            <button
-              type="button"
-              class="erp-password-reveal"
-              (click)="showConfirmPassword = !showConfirmPassword"
-              [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'"
-              [attr.aria-pressed]="showConfirmPassword"
-            >
-              <svg
-                *ngIf="!showConfirmPassword"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
+          <div class="erp-field erp-auth-login__field">
+            <label class="erp-field__label erp-auth-login__sr-only" for="reg-confirm">{{ ui.confirmLabel }}</label>
+            <div class="erp-input-wrap erp-input-wrap--password erp-input-wrap--login-password">
+              <span class="erp-auth-login__password-lead-icon" aria-hidden="true">
+                <i class="bi bi-lock"></i>
+              </span>
+              <input
+                id="reg-confirm"
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                class="erp-input erp-input--with-reveal"
+                [class.erp-input--error]="submitted && (form.controls.confirm.invalid || form.errors?.['mismatch'])"
+                formControlName="confirm"
+                [attr.placeholder]="ui.confirmPlaceholder"
+                autocomplete="new-password"
+              />
+              <button
+                type="button"
+                class="erp-password-reveal"
+                (click)="showConfirmPassword = !showConfirmPassword"
+                [attr.aria-label]="showConfirmPassword ? 'Hide confirm password' : 'Show confirm password'"
+                [attr.aria-pressed]="showConfirmPassword"
               >
-                <path
-                  d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
-              <svg
-                *ngIf="showConfirmPassword"
-                viewBox="0 0 24 24"
-                width="18"
-                height="18"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                aria-hidden="true"
-              >
-                <path
-                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <line x1="1" y1="1" x2="23" y2="23" stroke-linecap="round" />
-              </svg>
-            </button>
+                <i *ngIf="!showConfirmPassword" class="bi bi-eye" aria-hidden="true"></i>
+                <i *ngIf="showConfirmPassword" class="bi bi-eye-slash" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div class="erp-field__error" *ngIf="submitted && form.controls.confirm.errors?.['required']">Please confirm your password.</div>
+            <div class="erp-field__error" *ngIf="submitted && form.errors?.['mismatch']">Passwords do not match.</div>
           </div>
-          <div class="erp-field__error" *ngIf="submitted && form.controls.confirm.errors?.['required']">Please confirm your password.</div>
-          <div class="erp-field__error" *ngIf="submitted && form.errors?.['mismatch']">Passwords do not match.</div>
-        </div>
 
-        <div class="erp-field__error" *ngIf="apiError" role="alert">{{ apiError }}</div>
+          <div class="erp-auth-login__alert" *ngIf="apiError" role="alert">{{ apiError }}</div>
 
-        <button type="submit" class="erp-btn erp-btn--primary erp-btn--block" [disabled]="loading">
-          {{ loading ? ui.submitting : ui.submit }}
-        </button>
-      </form>
+          <button type="submit" class="erp-btn erp-btn--primary erp-btn--block erp-auth-login__submit" [disabled]="loading">
+            {{ loading ? ui.submitting : ui.submit }}
+          </button>
+        </form>
 
-      <p class="erp-auth__footer erp-auth__footer--tight">
-        {{ ui.footerLead }}
-        <a routerLink="/auth/login">{{ ui.footerLink }}</a>
-      </p>
+        <p class="erp-auth-login__footer">
+          {{ ui.footerLead }}
+          <a routerLink="/auth/login">{{ ui.footerLink }}</a>
+        </p>
 
-      <p class="erp-auth__legal">{{ ui.footerLegal }}</p>
+      </main>
     </div>
   </div>
 </div>

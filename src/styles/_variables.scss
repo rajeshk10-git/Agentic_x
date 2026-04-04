@@ -1,6 +1,6 @@
 // Aligns with chat widget: --chat-brand, gradients (multimodal AI agent UI)
-$font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-$font-display: 'Fraunces', Georgia, serif;
+$font-sans: 'Inter', sans-serif;
+$font-display: $font-sans;
 
 $primary-gradient: linear-gradient(135deg, #0e7d3f, #13a354);
 $secondary-gradient: linear-gradient(135deg, #0b6532, #0e7d3f);
@@ -57,10 +57,10 @@ $hero-bg: linear-gradient(152deg, #f8fafc 0%, #ecfdf5 38%, #f1f5f9 100%);
   --app-shadow-card-hover: 0 8px 12px rgba(15, 23, 42, 0.06), 0 28px 56px rgba(15, 23, 42, 0.1);
   --app-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 
-  --app-radius-sm: 10px;
-  --app-radius-md: 14px;
-  --app-radius-lg: 20px;
-  --app-radius-xl: 24px;
+  --app-radius-sm: 0.375rem;
+  --app-radius-md: 0.375rem;
+  --app-radius-lg: 0.375rem;
+  --app-radius-xl: 0.375rem;
 
   --erp-space-xs: 0.35rem;
   --erp-space-sm: 0.65rem;

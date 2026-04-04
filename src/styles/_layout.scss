@@ -8,10 +8,10 @@ html,
 body {
   height: 100%;
   margin: 0;
+  font-family: 'Inter', sans-serif !important;
 }
 
 body {
-  font-family: var(--app-font-sans);
   font-size: 16px;
   line-height: 1.55;
   color: var(--app-text);
@@ -21,6 +21,11 @@ body {
     radial-gradient(ellipse 70% 55% at 50% 110%, rgba(59, 130, 246, 0.06), transparent 55%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
+}
+
+svg {
+  background-color: transparent;
+  background-image: none;
 }
 
 a {

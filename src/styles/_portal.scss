@@ -30,14 +30,90 @@
   color: var(--app-text);
 }
 
-.erp-portal-topbar__left .erp-portal-home-ico {
-  color: var(--app-primary);
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0;
+  min-width: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.brand-title__icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+.brand-title__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.brand-title__name-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.brand-title__name {
+  font-family: var(--app-font-display);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--app-text);
+}
+
+.brand-title__tagline {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--app-text-muted);
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+
+.brand-status {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.brand-status__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92);
+}
+
+.brand-status--online .brand-status__dot {
+  background: #16a34a;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 0 10px rgba(22, 163, 74, 0.55);
+}
+
+.brand-status--offline .brand-status__dot {
+  background: #dc2626;
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.92),
+    0 0 10px rgba(220, 38, 38, 0.45);
 }
 
 .erp-portal-topbar__right {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  justify-content: flex-end;
+  gap: 0.5rem 1rem;
 }
 
 .erp-portal-conn {
@@ -125,57 +201,45 @@
   }
 }
 
-.erp-portal-ql {
-  position: relative;
+.erp-portal-quicklinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.15rem 0.35rem;
+  max-width: min(100%, 36rem);
+}
 
-  summary {
-    list-style: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--app-text-muted);
-    padding: 0.4rem 0.6rem;
-    border-radius: var(--app-radius-sm);
+.erp-portal-quicklinks__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--app-text-muted);
+  text-decoration: none;
+  border-radius: var(--app-radius-sm);
+  white-space: nowrap;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
 
-    &::-webkit-details-marker {
-      display: none;
-    }
-
-    &:hover {
-      color: var(--app-primary);
-      background: var(--app-primary-muted);
-    }
+  &:hover,
+  &:focus,
+  &:focus-visible,
+  &:active,
+  &:visited {
+    text-decoration: none;
   }
 
-  &[open] summary {
+  &:hover {
     color: var(--app-primary);
+    background: var(--app-primary-muted);
   }
 
-  ul {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    margin: 0.35rem 0 0;
-    padding: 0.5rem 0;
-    min-width: 188px;
-    list-style: none;
-    background: var(--app-card);
-    border: 1px solid var(--app-border-light);
-    border-radius: var(--app-radius-md);
-    box-shadow: var(--app-shadow-card);
-  }
-
-  a {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: var(--app-text);
-    font-size: 0.9rem;
-    font-weight: 500;
-
-    &:hover {
-      background: var(--app-primary-soft);
-      color: var(--app-primary);
-    }
+  &:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 2px;
   }
 }
 
@@ -731,7 +795,7 @@
     left: 1.25rem;
     right: 1.25rem;
     height: 3px;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 var(--app-radius-md) var(--app-radius-md);
     background: var(--app-primary-gradient);
     opacity: 0.35;
   }
@@ -767,7 +831,7 @@
   align-items: center;
   color: var(--app-text-muted);
   padding: 0.25rem;
-  border-radius: 8px;
+  border-radius: var(--app-radius-md);
   transition: background 0.15s ease, color 0.15s ease;
 
   &:hover {
@@ -960,7 +1024,7 @@
 .erp-portal-row__bar {
   width: 4px;
   height: 1.15rem;
-  border-radius: 2px;
+  border-radius: var(--app-radius-md);
   flex-shrink: 0;
 }
 
@@ -1066,7 +1130,7 @@
 .erp-portal-mini-chart__deck code {
   font-size: 0.78em;
   padding: 0.12rem 0.35rem;
-  border-radius: 6px;
+  border-radius: var(--app-radius-md);
   background: rgba(14, 125, 63, 0.08);
   color: var(--chat-brand-dark);
 }
@@ -1144,7 +1208,7 @@
 .erp-portal-bar {
   flex: 1;
   min-width: 0;
-  border-radius: 8px 8px 3px 3px;
+  border-radius: var(--app-radius-md);
   background: var(--app-primary-gradient);
   opacity: 0.88;
   transition: opacity 0.15s ease, transform 0.15s ease;
@@ -1183,7 +1247,7 @@
 
 .erp-portal-spark span {
   flex: 1;
-  border-radius: 4px;
+  border-radius: var(--app-radius-md);
   background: var(--secondary-gradient);
   min-height: 8px;
   opacity: 0.92;
@@ -1233,7 +1297,7 @@
 }
 
 .erp-portal-legend__swatch--line {
-  border-radius: 2px;
+  border-radius: var(--app-radius-md);
   width: 14px;
   height: 4px;
   background: #0a5c2e;
@@ -1370,7 +1434,7 @@ button.erp-portal-docqa__icon {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   padding: 0.3rem 0.6rem;
-  border-radius: 6px;
+  border-radius: var(--app-radius-md);
   background: var(--app-primary-muted);
   color: var(--chat-brand-dark);
 }
@@ -1427,10 +1491,24 @@ button.erp-portal-docqa__icon {
     min-width: 0;
     flex: 1;
 
-    > span {
+    .brand-title__name {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+    }
+
+    .brand-title__tagline {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+      font-size: 0.65rem;
+      line-height: 1.3;
+    }
+
+    .brand-title__icon {
+      width: 28px;
+      height: 28px;
     }
   }
 
@@ -1447,15 +1525,15 @@ button.erp-portal-docqa__icon {
     gap: 0.35rem;
   }
 
-  .erp-portal-ql summary {
-    font-size: 0.75rem;
-    padding: 0.3rem 0.4rem;
+  .erp-portal-quicklinks {
+    justify-content: flex-end;
+    max-width: 100%;
+    gap: 0.1rem 0.2rem;
   }
 
-  .erp-portal-ql ul {
-    right: 0;
-    left: auto;
-    max-width: min(260px, calc(100vw - 1.5rem));
+  .erp-portal-quicklinks__link {
+    font-size: 0.68rem;
+    padding: 0.28rem 0.4rem;
   }
 
   .erp-portal-icon-btn {

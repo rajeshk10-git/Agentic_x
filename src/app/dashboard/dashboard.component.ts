@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular
 import { BizzyBotComponent, BizzyBotWidgetConfig } from 'bot-lib-v1';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartData } from 'chart.js';
-import { APP_NAME, APP_TAGLINE } from '../app.constants';
+import { APP_NAME, APP_TAGLINE, BRAND_LOGO_DATA_URI } from '../app.constants';
 import { AUTH_ACCESS_TOKEN_KEY, AUTH_USER_KEY } from '../core/constants/auth-storage.constants';
 import { AuthUser } from '../core/models/auth-api.model';
 import { DASHBOARD_VIEW_DATA } from '../core/data/dashboard-view.data';
@@ -19,10 +19,10 @@ import { DashboardViewModel, PayslipData, SalaryClarityData } from '../core/mode
 })
 export class DashboardComponent implements OnInit {
   @ViewChild(BizzyBotComponent) private bizzyBot?: BizzyBotComponent;
-  @ViewChild('quickLinks') private quickLinksRef?: ElementRef<HTMLDetailsElement>;
 
   readonly appName = APP_NAME;
   readonly appTagline = APP_TAGLINE;
+  readonly brandLogoSrc = BRAND_LOGO_DATA_URI;
 
   /** Current calendar year for copyright (updates if the view is refreshed after year change). */
   get copyrightYear(): number {
@@ -34,27 +34,11 @@ export class DashboardComponent implements OnInit {
     event?.preventDefault();
     const el = document.getElementById(targetId);
     el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    const ql = this.quickLinksRef?.nativeElement;
-    if (ql?.open) {
-      ql.open = false;
-    }
   }
 
   onQuickLinkClick(event: Event, link: { href: string; scrollTarget?: string }): void {
     if (link.scrollTarget) {
       this.scrollToDashboardSection(link.scrollTarget, event);
-    }
-  }
-
-  @HostListener('document:pointerdown', ['$event'])
-  onDocumentPointerDown(event: PointerEvent): void {
-    const root = this.quickLinksRef?.nativeElement;
-    if (!root?.open) {
-      return;
-    }
-    const t = event.target as Node | null;
-    if (t && !root.contains(t)) {
-      root.open = false;
     }
   }
 
@@ -214,11 +198,6 @@ export class DashboardComponent implements OnInit {
       this.closeLearnMorePanel();
       return;
     }
-    const ql = this.quickLinksRef?.nativeElement;
-    if (ql?.open) {
-      ql.open = false;
-      return;
-    }
     if (this.bizzyBot?.isChatOpen) {
       this.bizzyBot.closeChat();
     }
@@ -254,7 +233,7 @@ export class DashboardComponent implements OnInit {
         label: ds.label,
         data: [...ds.data],
         backgroundColor: i === 0 ? 'rgba(14, 125, 63, 0.88)' : 'rgba(5, 150, 105, 0.55)',
-        borderRadius: 8,
+        borderRadius: 6,
         borderSkipped: false,
         maxBarThickness: 36,
       })),
@@ -289,7 +268,7 @@ export class DashboardComponent implements OnInit {
           label: 'Compensation (USD)',
           data: [...s.data],
           backgroundColor: ['rgba(14, 125, 63, 0.92)', 'rgba(5, 150, 105, 0.75)', 'rgba(110, 231, 183, 0.85)'],
-          borderRadius: 10,
+          borderRadius: 6,
           borderSkipped: false,
           barThickness: 22,
         },
@@ -304,7 +283,7 @@ export class DashboardComponent implements OnInit {
           label: 'Gross inflow',
           data: [...c.inflow],
           backgroundColor: 'rgba(14, 125, 63, 0.85)',
-          borderRadius: 8,
+          borderRadius: 6,
           borderSkipped: false,
           maxBarThickness: 28,
         },
@@ -312,7 +291,7 @@ export class DashboardComponent implements OnInit {
           label: 'Tax outflow',
           data: [...c.outflowTax],
           backgroundColor: 'rgba(220, 38, 38, 0.45)',
-          borderRadius: 8,
+          borderRadius: 6,
           borderSkipped: false,
           maxBarThickness: 28,
         },
@@ -379,7 +358,7 @@ export class DashboardComponent implements OnInit {
           labels: {
             usePointStyle: true,
             padding: 16,
-            font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11 },
+            font: { family: "'Inter', sans-serif", size: 11 },
             color: '#64748b',
           },
         },
@@ -387,8 +366,8 @@ export class DashboardComponent implements OnInit {
           backgroundColor: 'rgba(15, 23, 42, 0.92)',
           padding: 12,
           cornerRadius: 10,
-          titleFont: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12 },
-          bodyFont: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 12 },
+          titleFont: { family: "'Inter', sans-serif", size: 12 },
+          bodyFont: { family: "'Inter', sans-serif", size: 12 },
         },
       },
       scales: {
@@ -490,7 +469,7 @@ export class DashboardComponent implements OnInit {
           labels: {
             usePointStyle: true,
             padding: 14,
-            font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11 },
+            font: { family: "'Inter', sans-serif", size: 11 },
             color: '#64748b',
           },
         },
@@ -536,7 +515,7 @@ export class DashboardComponent implements OnInit {
           labels: {
             usePointStyle: true,
             padding: 14,
-            font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 11 },
+            font: { family: "'Inter', sans-serif", size: 11 },
             color: '#64748b',
           },
         },
@@ -560,7 +539,7 @@ export class DashboardComponent implements OnInit {
           labels: {
             usePointStyle: true,
             padding: 12,
-            font: { family: "'Plus Jakarta Sans', system-ui, sans-serif", size: 10 },
+            font: { family: "'Inter', sans-serif", size: 10 },
             color: '#64748b',
           },
         },

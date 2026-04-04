@@ -1,19 +1,27 @@
 <div class="erp-portal">
   <header class="erp-portal-topbar">
     <div class="erp-portal-topbar__left">
-      <svg class="erp-portal-home-ico" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path
-          d="M12 3L4 9v12h6v-7h4v7h6V9l-8-6z"
-          stroke="currentColor"
-          stroke-width="1.6"
-          stroke-linejoin="round"
-          fill="currentColor"
-          fill-opacity="0.12"
-        />
-      </svg>
-      <span>{{ appName }}</span>
+      <ng-container *ngIf="networkStatus.online$ | async as online">
+        <h1 class="brand-title">
+          <img class="brand-title__icon" [src]="brandLogoSrc" width="32" height="32" [alt]="appName" />
+          <span class="brand-title__text">
+            <span class="brand-title__name-row">
+              <span class="brand-title__name">{{ appName }}</span>
+            </span>
+            <span class="brand-title__tagline">{{ appTagline }}</span>
+          </span>
+        </h1>
+      </ng-container>
     </div>
     <div class="erp-portal-topbar__right">
+      <nav class="erp-portal-quicklinks" aria-label="Quick links">
+        <a
+          *ngFor="let q of vm.ui.quickLinks"
+          class="erp-portal-quicklinks__link"
+          [href]="q.href"
+          (click)="onQuickLinkClick($event, q)"
+          >{{ q.label }}</a>
+      </nav>
       <div
         class="erp-portal-conn"
         role="status"
@@ -27,28 +35,6 @@
         ></span>
         <span class="erp-portal-conn__label">{{ net.online ? 'Online' : 'Offline' }}</span>
       </div>
-      <details #quickLinks class="erp-portal-ql">
-        <summary aria-haspopup="true">Quick Links</summary>
-        <ul>
-          <li *ngFor="let q of vm.ui.quickLinks">
-            <a [href]="q.href" (click)="onQuickLinkClick($event, q)">{{ q.label }}</a>
-          </li>
-        </ul>
-      </details>
-      <span class="erp-portal-icon-btn-slot">
-        <button
-          type="button"
-          class="erp-portal-icon-btn"
-          aria-label="Notifications, 2 unread"
-          title="Notifications"
-        >
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5" />
-            <path d="M9 17a3 3 0 0 0 6 0" stroke-linecap="round" />
-          </svg>
-        </button>
-        <span class="erp-portal-notify-dot" aria-hidden="true"></span>
-      </span>
       <button
         type="button"
         class="erp-portal-icon-btn"
