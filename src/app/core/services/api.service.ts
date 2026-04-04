@@ -12,6 +12,7 @@ import {
   LoginRequest,
   RegisterRequest,
 } from '../models/auth-api.model';
+import { DashboardChartsJson } from '../models/dashboard-charts.model';
 import { DashboardViewModel } from '../models/dashboard-view.model';
 
 @Injectable({
@@ -25,9 +26,25 @@ export class ApiService {
    * Point `environment.apiUrl` at your Bizzy backend when ready.
    */
   getDashboardView$(): Observable<DashboardViewModel> {
-    return this.http.get<DashboardViewModel>(`${environment.apiUrl}/dashboard`).pipe(
+    return this.http.get<DashboardViewModel>(this.url('/dashboard')).pipe(
       catchError(() => of(DASHBOARD_VIEW_DATA))
     );
+  }
+
+  /**
+   * GET `/dashboard/charts` — same shape as `assets/data/dashboard-charts.json`.
+   * Caller should fall back to static assets if this errors (404, network, etc.).
+   */
+  getDashboardCharts$(): Observable<DashboardChartsJson> {
+    return this.http.get<DashboardChartsJson>(this.url('/dashboard/charts'));
+  }
+
+  /**
+   * GET `/dashboard/salary-metrics` — same base as auth (`environment.apiUrl`).
+   * Bearer token added by `HttpConfigInterceptor`.
+   */
+  getSalaryMetrics$(): Observable<unknown> {
+    return this.http.get<unknown>(this.url('/dashboard/salary-metrics'));
   }
 
   /** POST `/auth/login` — expects JSON body; stores token client-side on success via caller. */

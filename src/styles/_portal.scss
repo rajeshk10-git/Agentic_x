@@ -499,7 +499,7 @@
 /* Two-line “Did you know?” + tax tip under greeting (copy from dashboard VM) */
 .erp-portal-hero__tip {
   margin: 0.45rem 0 1rem;
-  max-width: 44ch;
+  // max-width: 44ch;
   padding-left: 0.85rem;
   border-left: 3px solid var(--app-primary);
   position: relative;
@@ -531,7 +531,7 @@
   font-size: 0.98rem;
   color: var(--app-text-muted);
   line-height: 1.6;
-  max-width: 38ch;
+  // max-width: 38ch;
 }
 
 .erp-portal-hero__art {
@@ -1321,6 +1321,21 @@
   background: color-mix(in srgb, var(--chat-brand) 10%, var(--app-card));
   color: var(--chat-brand-dark);
   border: 1px solid color-mix(in srgb, var(--chat-brand) 24%, transparent);
+}
+
+.erp-portal-grid--api-summary {
+  margin-bottom: 0.35rem;
+}
+
+.erp-portal-card__body--api-summary {
+  text-align: left;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.erp-portal-api-card__note {
+  margin-top: auto;
+  padding-top: 0.65rem;
 }
 
 .erp-portal-grid--quad {

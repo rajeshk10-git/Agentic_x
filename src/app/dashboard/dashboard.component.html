@@ -79,10 +79,6 @@
       </div>
     </section>
 
-    <div class="erp-portal-mission">
-      <span class="erp-portal-mission__pill" *ngFor="let pill of vm.ui.missionPills">{{ pill }}</span>
-    </div>
-
     <section class="erp-portal-banner">
       <div class="erp-portal-banner__text">
         <strong>{{ appName }}</strong>
@@ -98,6 +94,30 @@
       </div>
       <p class="erp-portal-section__meta">{{ vm.ui.section.meta }}</p>
     </div>
+
+    <section
+      class="erp-portal-grid erp-portal-grid--api-summary"
+      *ngIf="chartsReady && chartApiCards.length"
+      aria-label="Payroll analytics summary from dashboard charts API"
+    >
+      <article class="erp-portal-card" *ngFor="let card of chartApiCards">
+        <div class="erp-portal-card__head">
+          <h2 class="erp-portal-card__title">{{ card.title }}</h2>
+        </div>
+        <div class="erp-portal-card__body erp-portal-card__body--stretch erp-portal-card__body--api-summary">
+          <p class="erp-portal-card-chart__eyebrow" *ngIf="card.eyebrow">{{ card.eyebrow }}</p>
+          <div class="erp-portal-kpi" *ngIf="card.rows.length">
+            <div class="erp-portal-kpi__row" *ngFor="let row of card.rows">
+              <span class="erp-portal-kpi__label">{{ row.label }}</span>
+              <span class="erp-portal-kpi__val">{{ row.value }}</span>
+            </div>
+          </div>
+          <p class="erp-portal-muted erp-portal-muted--small erp-portal-api-card__note" *ngIf="card.note">
+            {{ card.note }}
+          </p>
+        </div>
+      </article>
+    </section>
 
     <section class="erp-portal-grid erp-portal-grid--quad">
       <article id="erp-dash-anchor-salary-ytd" class="erp-portal-card erp-dash-scroll-target">

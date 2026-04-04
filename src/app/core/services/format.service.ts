@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class FormatService {
   formatCurrency(amount: number, currencyCode: string): string {
-    return new Intl.NumberFormat('en-US', {
+    const locale = currencyCode === 'INR' ? 'en-IN' : 'en-US';
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currencyCode,
       maximumFractionDigits: 0,

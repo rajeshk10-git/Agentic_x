@@ -18,17 +18,17 @@
   },
   "netPayTrend": {
     "labels": ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "P11", "P12"],
-    "data": [5680, 5745, 5820, 5790, 5910, 5985, 5940, 6025, 6055, 6088, 6075, 6125],
-    "subtitle": "Trailing twelve pay periods · USD, per pay stub"
+    "data": [471440, 476835, 483060, 480570, 490530, 496755, 493020, 500075, 502565, 505304, 504225, 507375],
+    "subtitle": "Trailing twelve pay periods · INR, per pay stub"
   },
   "salaryComposition": {
     "labels": ["YTD gross", "YTD tax withheld", "Benefits & other deferrals"],
-    "data": [82800, 18640, 9240],
+    "data": [6872400, 1547120, 766920],
     "footnote": "YTD totals from payroll — benefits bucket includes pre-tax deductions you elected"
   },
   "ytdCashflow": {
     "labels": ["Q1", "Q2", "Q3", "Q4 (forecast)"],
-    "inflow": [74400, 78300, 81900, 85650],
-    "outflowTax": [16740, 17680, 18450, 19220]
+    "inflow": [6175200, 6498900, 6797700, 7108950],
+    "outflowTax": [1389420, 1467440, 1531350, 1595260]
   }
 }

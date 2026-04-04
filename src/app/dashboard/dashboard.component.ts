@@ -1,16 +1,35 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { BizzyBotComponent, BizzyBotWidgetConfig } from 'bot-lib-v1';
 import { Router } from '@angular/router';
 import { ChartConfiguration, ChartData } from 'chart.js';
-import { APP_NAME, APP_TAGLINE, BRAND_LOGO_DATA_URI } from '../app.constants';
+import { APP_CURRENCY_CODE, APP_NAME, APP_TAGLINE, BRAND_LOGO_DATA_URI } from '../app.constants';
 import { AUTH_ACCESS_TOKEN_KEY, AUTH_USER_KEY } from '../core/constants/auth-storage.constants';
 import { AuthUser } from '../core/models/auth-api.model';
 import { DASHBOARD_VIEW_DATA } from '../core/data/dashboard-view.data';
 import { DashboardChartsJson } from '../core/models/dashboard-charts.model';
 import { DashboardChartsService } from '../core/services/dashboard-charts.service';
+import { ApiService } from '../core/services/api.service';
 import { FormatService } from '../core/services/format.service';
 import { NetworkStatusService } from '../core/services/network-status.service';
 import { DashboardViewModel, PayslipData, SalaryClarityData } from '../core/models/dashboard-view.model';
+import {
+  mapSalaryMetricsApiPayload,
+  salaryMetricsPatchIsEmpty,
+} from '../core/utils/salary-metrics-api.mapper';
+import { environment } from '../../environments/environment';
+
+/** KPI rows for cards that summarize `DashboardChartsJson` from the charts API. */
+interface DashboardChartsApiCardRow {
+  label: string;
+  value: string;
+}
+
+interface DashboardChartsApiCard {
+  title: string;
+  eyebrow?: string;
+  rows: DashboardChartsApiCardRow[];
+  note?: string;
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -62,6 +81,9 @@ export class DashboardComponent implements OnInit {
   salaryChartFootnote = '';
   chartsReady = false;
 
+  /** Derived from charts API JSON — surfaced as summary cards above the main quad grid. */
+  chartApiCards: DashboardChartsApiCard[] = [];
+
   withholdingChartType = 'bar' as const;
   withholdingChartData: ChartData<'bar'> = { labels: [], datasets: [] };
   withholdingChartOptions: ChartConfiguration<'bar'>['options'] = this.buildWithholdingOptions();
@@ -90,6 +112,7 @@ export class DashboardComponent implements OnInit {
     private router: Router,
     private format: FormatService,
     private dashboardCharts: DashboardChartsService,
+    private api: ApiService,
     readonly networkStatus: NetworkStatusService
   ) {
     this.todayLabel = this.format.formatLongDate(new Date());
@@ -97,17 +120,31 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.api.getDashboardView$().subscribe((vm) => {
+      this.vm = vm;
+      this.refreshVmBoundCharts();
+    });
+
     this.dashboardCharts.loadCharts$().subscribe((json) => {
       this.applyJsonCharts(json);
       this.chartsReady = true;
     });
 
-    // Demo / offline: skip GET `${apiUrl}/dashboard`; keep default `DASHBOARD_VIEW_DATA` above.
-    // Re-enable: inject `ApiService`, then:
-    // this.api.getDashboardView$().subscribe((d) => {
-    //   this.vm = d;
-    //   this.refreshVmBoundCharts();
-    // });
+    this.api.getSalaryMetrics$().subscribe({
+      next: (raw) => {
+        const patch = mapSalaryMetricsApiPayload(raw);
+        if (salaryMetricsPatchIsEmpty(patch)) {
+          return;
+        }
+        this.applySalaryClarityPatch(patch);
+        this.refreshVmBoundCharts();
+      },
+      error: (err: unknown) => {
+        if (!environment.production) {
+          console.warn('[Dashboard] GET /dashboard/salary-metrics failed; using mock salary clarity', err);
+        }
+      },
+    });
   }
 
   get greeting(): string {
@@ -222,7 +259,23 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  private applySalaryClarityPatch(patch: Partial<SalaryClarityData>): void {
+    const prev = this.vm.data.salaryClarity;
+    const next: SalaryClarityData = { ...prev };
+    (['ytdGross', 'ytdTaxWithheld', 'lastPayNet'] as const).forEach((k) => {
+      const v = patch[k];
+      if (v !== undefined && Number.isFinite(v)) {
+        next[k] = v;
+      }
+    });
+    this.vm = {
+      ...this.vm,
+      data: { ...this.vm.data, salaryClarity: next },
+    };
+  }
+
   private applyJsonCharts(json: DashboardChartsJson): void {
+    this.chartApiCards = this.buildChartApiCards(json);
     this.netPayTrendSubtitle = json.netPayTrend.subtitle;
     this.salaryChartFootnote = json.salaryComposition.footnote;
 
@@ -265,7 +318,7 @@ export class DashboardComponent implements OnInit {
       labels: [...s.labels],
       datasets: [
         {
-          label: 'Compensation (USD)',
+          label: `Compensation (${APP_CURRENCY_CODE})`,
           data: [...s.data],
           backgroundColor: ['rgba(14, 125, 63, 0.92)', 'rgba(5, 150, 105, 0.75)', 'rgba(110, 231, 183, 0.85)'],
           borderRadius: 6,
@@ -297,6 +350,88 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
+  }
+
+  private buildChartApiCards(json: DashboardChartsJson): DashboardChartsApiCard[] {
+    const cards: DashboardChartsApiCard[] = [
+      {
+        title: json.meta.title,
+        rows: [],
+        note: json.meta.description,
+      },
+    ];
+
+    const w = json.withholdingVsGross;
+    const grossDs = w.datasets[0];
+    const taxDs = w.datasets[1];
+    if (w.labels.length && grossDs?.data?.length && taxDs?.data?.length) {
+      const gi = Math.min(w.labels.length, grossDs.data.length, taxDs.data.length) - 1;
+      const month = w.labels[gi] ?? `M${gi + 1}`;
+      cards.push({
+        title: 'Withholding vs gross',
+        eyebrow: 'Latest period (indexed)',
+        rows: [
+          { label: `${month} · ${grossDs.label}`, value: String(grossDs.data[gi]) },
+          { label: `${month} · ${taxDs.label}`, value: String(taxDs.data[gi]) },
+        ],
+        note: 'Indexed series for shape comparison — replace with currency from payroll when live.',
+      });
+    }
+
+    const n = json.netPayTrend;
+    if (n.data.length) {
+      const last = n.data[n.data.length - 1];
+      const first = n.data[0];
+      const delta = last - first;
+      const deltaLabel =
+        (delta >= 0 ? '+' : '') + this.format.formatCurrency(delta, APP_CURRENCY_CODE);
+      cards.push({
+        title: 'Net pay (trail)',
+        eyebrow: n.subtitle,
+        rows: [
+          { label: 'Latest pay period', value: this.format.formatCurrency(last, APP_CURRENCY_CODE) },
+          { label: 'Change vs first period', value: deltaLabel },
+        ],
+      });
+    }
+
+    const s = json.salaryComposition;
+    if (s.labels.length && s.data.length) {
+      const len = Math.min(s.labels.length, s.data.length);
+      const rows: DashboardChartsApiCardRow[] = [];
+      for (let i = 0; i < len; i++) {
+        rows.push({
+          label: s.labels[i],
+          value: this.format.formatCurrency(s.data[i], APP_CURRENCY_CODE),
+        });
+      }
+      cards.push({
+        title: 'Salary composition (YTD)',
+        rows,
+        note: s.footnote,
+      });
+    }
+
+    const c = json.ytdCashflow;
+    if (c.labels.length && c.inflow.length && c.outflowTax.length) {
+      const qi = Math.min(c.labels.length, c.inflow.length, c.outflowTax.length) - 1;
+      const inflow = c.inflow[qi];
+      const outTax = c.outflowTax[qi];
+      cards.push({
+        title: 'Cashflow snapshot',
+        eyebrow: c.labels[qi],
+        rows: [
+          { label: 'Gross inflow', value: this.format.formatCurrency(inflow, APP_CURRENCY_CODE) },
+          { label: 'Tax outflow', value: this.format.formatCurrency(outTax, APP_CURRENCY_CODE) },
+          {
+            label: 'Net (inflow − tax)',
+            value: this.format.formatCurrency(inflow - outTax, APP_CURRENCY_CODE),
+          },
+        ],
+      });
+    }
+
+    return cards;
   }
 
   private refreshVmBoundCharts(): void {
@@ -399,7 +534,7 @@ export class DashboardComponent implements OnInit {
           callbacks: {
             label: (ctx) => {
               const v = ctx.raw as number;
-              return ` Net pay: $${v.toLocaleString('en-US')}`;
+              return ` Net pay: ${this.format.formatCurrency(v, APP_CURRENCY_CODE)}`;
             },
           },
         },
@@ -414,7 +549,7 @@ export class DashboardComponent implements OnInit {
           ticks: {
             color: '#94a3b8',
             font: { size: 10 },
-            callback: (val) => '$' + Number(val).toLocaleString('en-US'),
+            callback: (val) => this.format.formatCurrency(Number(val), APP_CURRENCY_CODE),
           },
         },
       },
@@ -435,7 +570,7 @@ export class DashboardComponent implements OnInit {
           callbacks: {
             label: (ctx) => {
               const v = ctx.raw as number;
-              return ` $${v.toLocaleString('en-US')}`;
+              return ` ${this.format.formatCurrency(v, APP_CURRENCY_CODE)}`;
             },
           },
         },
@@ -447,7 +582,7 @@ export class DashboardComponent implements OnInit {
           ticks: {
             color: '#94a3b8',
             font: { size: 10 },
-            callback: (val) => '$' + Number(val).toLocaleString('en-US'),
+            callback: (val) => this.format.formatCurrency(Number(val), APP_CURRENCY_CODE),
           },
         },
         y: {
@@ -481,7 +616,7 @@ export class DashboardComponent implements OnInit {
             label: (ctx) => {
               const v = ctx.raw as number;
               const ds = ctx.dataset.label || '';
-              return ` ${ds}: $${v.toLocaleString('en-US')}`;
+              return ` ${ds}: ${this.format.formatCurrency(v, APP_CURRENCY_CODE)}`;
             },
           },
         },
@@ -497,7 +632,7 @@ export class DashboardComponent implements OnInit {
           ticks: {
             color: '#94a3b8',
             font: { size: 10 },
-            callback: (val) => '$' + Number(val).toLocaleString('en-US'),
+            callback: (val) => this.format.formatCurrency(Number(val), APP_CURRENCY_CODE),
           },
         },
       },

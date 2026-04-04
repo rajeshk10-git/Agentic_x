@@ -15,17 +15,17 @@ export const DASHBOARD_CHARTS_FALLBACK: DashboardChartsJson = {
   },
   netPayTrend: {
     labels: ['P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'P8', 'P9', 'P10', 'P11', 'P12'],
-    data: [6850, 6920, 7010, 6980, 7120, 7240, 7180, 7290, 7310, 7360, 7340, 7380],
-    subtitle: 'Last 12 pay periods · illustrative USD',
+    data: [568550, 574360, 579830, 577340, 590960, 600920, 595940, 605070, 607730, 610880, 609220, 612540],
+    subtitle: 'Last 12 pay periods · illustrative INR',
   },
   salaryComposition: {
     labels: ['YTD gross', 'YTD tax withheld', 'Benefits & other'],
-    data: [27600, 6210, 3180],
+    data: [2290800, 515430, 263940],
     footnote: 'Structured payroll aggregates (demo)',
   },
   ytdCashflow: {
     labels: ['Q1', 'Q2', 'Q3', 'Q4 (proj.)'],
-    inflow: [24800, 26100, 27300, 28500],
-    outflowTax: [5580, 5920, 6100, 6280],
+    inflow: [2058400, 2166300, 2265900, 2365500],
+    outflowTax: [463140, 491360, 506300, 521240],
   },
 };

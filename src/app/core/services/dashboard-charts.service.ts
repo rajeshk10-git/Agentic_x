@@ -4,17 +4,25 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DASHBOARD_CHARTS_FALLBACK } from '../data/dashboard-charts.fallback';
 import { DashboardChartsJson } from '../models/dashboard-charts.model';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardChartsService {
-  private readonly url = 'assets/data/dashboard-charts.json';
+  private readonly assetUrl = 'assets/data/dashboard-charts.json';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private api: ApiService
+  ) {}
 
+  /**
+   * Prefer live API (`GET /dashboard/charts`), then bundled JSON, then inline fallback.
+   */
   loadCharts$(): Observable<DashboardChartsJson> {
-    return this.http.get<DashboardChartsJson>(this.url).pipe(
+    return this.api.getDashboardCharts$().pipe(
+      catchError(() => this.http.get<DashboardChartsJson>(this.assetUrl)),
       catchError(() => of(DASHBOARD_CHARTS_FALLBACK))
     );
   }

@@ -93,9 +93,9 @@ export const DASHBOARD_VIEW_DATA: DashboardViewModel = {
   },
   data: {
     salaryClarity: {
-      ytdGross: 82800,
-      ytdTaxWithheld: 18640,
-      lastPayNet: 6125,
+      ytdGross: 6872400,
+      ytdTaxWithheld: 1547120,
+      lastPayNet: 507375,
     },
     taxSim: {
       scenarioLabel: 'Married filing jointly · standard deduction (example)',
@@ -109,10 +109,10 @@ export const DASHBOARD_VIEW_DATA: DashboardViewModel = {
       year: 2026,
       paidDays: 22,
       totalDaysInMonth: 31,
-      grossPay: 7665,
-      deductions: 1540,
-      netPay: 6125,
-      currency: 'USD',
+      grossPay: 636195,
+      deductions: 127820,
+      netPay: 507375,
+      currency: 'INR',
     },
     ytdBars: [
       { label: 'Jan', pct: 62 },
